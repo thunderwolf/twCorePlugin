@@ -1,0 +1,43 @@
+twLanguage:
+  twLanguage_1:
+    code: pl
+    name: Polish
+  twLanguage_2:
+    code: en
+    name: English
+
+twPluginStatus:
+  twPluginStatus_1:
+    code:       'disabled'
+  twPluginStatus_2:
+    code:       'activated'
+  twPluginStatus_3:
+    code:       'suspended'
+
+twPluginStatusI18n:
+  twPluginStatusI18n_1_en:
+    id: twPluginStatus_1
+    culture: en
+    name: 'Disabled'
+  twPluginStatusI18n_1_pl:
+    id: twPluginStatus_1
+    culture: pl
+    name: 'Zdezaktywowany'
+  twPluginStatusI18n_2_en:
+    id: twPluginStatus_2
+    culture: en
+    name: 'Activated'
+  twPluginStatusI18n_2_pl:
+    id: twPluginStatus_2
+    culture: pl
+    name: 'Aktywny'
+  twPluginStatusI18n_3_en:
+    id: twPluginStatus_3
+    culture: en
+    name: 'Suspended'
+  twPluginStatusI18n_3_pl:
+    id: twPluginStatus_3
+    culture: pl
+    name: 'Zawieszony'
+    
+

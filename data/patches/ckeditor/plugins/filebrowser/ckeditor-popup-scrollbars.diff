@@ -1,0 +1,43 @@
+diff -Nur --strip-trailing-cr -x .project ckeditor/_source/plugins/filebrowser/plugin.js ckeditor.mod/_source/plugins/filebrowser/plugin.js
+--- ckeditor/_source/plugins/filebrowser/plugin.js	2009-10-16 16:04:54.000000000 +0200
++++ ckeditor.mod/_source/plugins/filebrowser/plugin.js	2009-12-06 19:41:47.119130490 +0100
+@@ -166,6 +166,8 @@
+ 				|| editor.config.filebrowserWindowWidth || '80%';
+ 		var height = editor.config[ 'filebrowser' + ucFirst( dialog.getName() ) + 'WindowHeight' ]
+ 				|| editor.config.filebrowserWindowHeight || '70%';
++		var scrollbars = editor.config[ 'filebrowser' + ucFirst( dialog.getName() ) + 'WindowScrollbars' ]
++				|| editor.config.filebrowserWindowScrollbars || false;
+ 
+ 		var params = this.filebrowser.params || {};
+ 		params.CKEditor = editor.name;
+@@ -174,7 +176,7 @@
+ 			params.langCode = editor.langCode;
+ 
+ 		var url = addQueryString( this.filebrowser.url, params );
+-		editor.popup( url, width, height );
++		editor.popup( url, width, height, scrollbars );
+ 	}
+ 
+ 	/**
+diff -Nur --strip-trailing-cr -x .project ckeditor/_source/plugins/popup/plugin.js ckeditor.mod/_source/plugins/popup/plugin.js
+--- ckeditor/_source/plugins/popup/plugin.js	2009-10-16 16:04:56.000000000 +0200
++++ ckeditor.mod/_source/plugins/popup/plugin.js	2009-12-06 19:36:53.622501159 +0100
+@@ -14,7 +14,7 @@
+ 	 * @param {String} width Popup window width.
+ 	 * @param {String} height Popup window height.
+ 	 */
+-	popup : function( url, width, height )
++	popup : function( url, width, height, scrollbars )
+ 	{
+ 		width = width || '80%';
+ 		height = height || '70%';
+@@ -37,7 +37,8 @@
+ 			',width='  + width +
+ 			',height=' + height +
+ 			',top='  + top +
+-			',left=' + left;
++			',left=' + left +
++			',scrollbars=' + ( (scrollbars) ? 'yes' : 'no' );
+ 
+ 		var popupWindow = window.open( '', null, options, true );
+ 
