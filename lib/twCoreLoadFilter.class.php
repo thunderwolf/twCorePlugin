@@ -1,8 +1,6 @@
 <?php
-class twCoreLoadFilter extends sfFilter
-{
-	public function execute($filterChain)
-	{
+class twCoreLoadFilter extends sfFilter {
+	public function execute($filterChain) {
 		$memcache = sfConfig::get('tw_memcache', false);
 		$strict_key_prefix = sfConfig::get('tw_memcache_skp', null);
 		$this->getStatusArray($memcache, $strict_key_prefix);
@@ -12,7 +10,7 @@ class twCoreLoadFilter extends sfFilter
 	}
 
 	protected function getStatusArray($memcache, $strict_key_prefix) {
-		$status_array_key = $strict_key_prefix.'.plugin.status.array';
+		$status_array_key = $strict_key_prefix . '.plugin.status.array';
 		if ($memcache != false) {
 			$status_array = $memcache->get($status_array_key);
 			if ($status_array === false) {
@@ -36,7 +34,7 @@ class twCoreLoadFilter extends sfFilter
 	}
 
 	protected function getPluginArray($memcache, $strict_key_prefix) {
-		$plugin_array_key = $strict_key_prefix.'.plugin.active.array';
+		$plugin_array_key = $strict_key_prefix . '.plugin.active.array';
 		if ($memcache != false) {
 			$plugins_array = $memcache->get($plugin_array_key);
 			if ($plugins_array === false) {

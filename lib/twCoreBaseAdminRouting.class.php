@@ -13,9 +13,9 @@
  * @package    symfony
  * @subpackage plugin
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: twCoreBaseRouting.class.php 2824 2009-07-28 23:16:05Z ldath $
+ * @version    SVN: $Id: twCoreBaseAdminRouting.class.php 3306 2010-09-04 18:37:19Z ldath $
  */
-class twCoreBaseRouting
+class twCoreBaseAdminRouting
 {
 	static public function listenToRoutingLoadConfigurationEvent(sfEvent $event)
 	{
@@ -35,7 +35,7 @@ class twCoreBaseRouting
 			'requirements'         => array(),
 		)));
 	}
-	
+
 	static public function addRouteForSettings(sfEvent $event)
 	{
 		$event->getSubject()->prependRoute('tw_settings', new sfPropelRouteCollection(array(

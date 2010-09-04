@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="propel" package="plugins.twCorePlugin.lib.model" defaultIdMethod="native">
+
+  <table name="tw_language" phpName="twLanguage">
+    <column name="id" type="integer" required="true" primaryKey="true" autoincrement="true" />
+    <column name="code" type="VARCHAR" size="5" required="true" />
+    <column name="name" type="VARCHAR" size="30" required="true" />
+    <unique name="code">
+      <unique-column name="code" />
+    </unique>
+  </table>
+
+  <table name="tw_plugin" phpName="twPlugin" isI18N="true" i18nTable="tw_plugin_i18n">
+    <column name="id" type="integer" required="true" primaryKey="true" autoincrement="true" />
+    <column name="status_id" type="integer" required="true" />
+    <foreign-key foreignTable="tw_plugin_status" onDelete="cascade">
+      <reference local="status_id" foreign="id" />
+    </foreign-key>
+    <column name="code" type="VARCHAR" size="20" required="true" />
+    <unique name="code">
+      <unique-column name="code" />
+    </unique>
+  </table>
+
+  <table name="tw_plugin_i18n" phpName="twPluginI18n">
+    <column name="id" type="integer" required="true" primaryKey="true" />
+    <foreign-key foreignTable="tw_plugin">
+      <reference local="id" foreign="id" />
+    </foreign-key>
+    <column name="culture" isCulture="true" type="varchar" size="7" required="true" primaryKey="true" />
+    <column name="name" type="LONGVARCHAR" required="true" />
+    <column name="description" type="LONGVARCHAR" />
+  </table>
+
+  <table name="tw_plugin_status" phpName="twPluginStatus" isI18N="true" i18nTable="tw_plugin_status_i18n">
+    <column name="id" type="integer" required="true" primaryKey="true" autoincrement="true" />
+    <column name="code" type="VARCHAR" size="20" required="true" />
+    <unique name="code">
+      <unique-column name="code" />
+    </unique>
+  </table>
+
+  <table name="tw_plugin_status_i18n" phpName="twPluginStatusI18n">
+    <column name="id" type="integer" required="true" primaryKey="true" />
+    <foreign-key foreignTable="tw_plugin_status">
+      <reference local="id" foreign="id" />
+    </foreign-key>
+    <column name="culture" isCulture="true" type="varchar" size="7" required="true" primaryKey="true" />
+    <column name="name" type="LONGVARCHAR" required="true" />
+    <column name="description" type="LONGVARCHAR" />
+  </table>
+
+  <table name="tw_routing" phpName="twRouting">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="plugin_id" type="integer" required="true" />
+    <foreign-key foreignTable="tw_plugin">
+      <reference local="plugin_id" foreign="id" />
+    </foreign-key>
+    <column name="pos" type="INTEGER" required="true" />
+    <column name="route" type="VARCHAR" size="250" required="true" />
+    <column name="url" type="VARCHAR" size="250" required="true" />
+    <column name="type" type="INTEGER" required="true" />
+    <column name="name" type="VARCHAR" size="250" required="true" />
+    <column name="instructions" type="LONGVARCHAR" />
+    <index name="pos">
+      <index-column name="pos" />
+    </index>
+    <unique name="url">
+      <unique-column name="url" />
+    </unique>
+    <behavior name="sortable">
+      <parameter name="rank_column" value="pos" />
+    </behavior>
+  </table>
+
+  <table name="tw_settings" phpName="twSettings">
+    <column name="name" type="VARCHAR" size="250" required="true" />
+    <column name="value" type="LONGVARCHAR" required="false" />
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <unique name="uname">
+      <unique-column name="name" />
+    </unique>
+  </table>
+
+  <table name="tw_version" phpName="twVersion">
+    <column name="id" type="integer" required="true" primaryKey="true" autoincrement="true" />
+    <column name="name" type="VARCHAR" size="20" required="true" />
+    <column name="value" type="LONGVARCHAR" required="true" />
+    <unique name="code">
+      <unique-column name="name" />
+    </unique>
+  </table>
+
+</database>

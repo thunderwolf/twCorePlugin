@@ -24,7 +24,8 @@ class twSessionStorage extends sfSessionStorage
 
 		session_name($sessionName);
 
-		if ($sessionId = $this->options['session_id']) {
+		$sessionId = $this->options['session_id'];
+		if ($sessionId) {
 			session_id($sessionId);
 		}
 

@@ -1,12 +1,10 @@
 <?php
-class twCoreLanguageFilter extends sfFilter
-{
-	public function execute($filterChain)
-	{
+class twCoreLanguageFilter extends sfFilter {
+	public function execute($filterChain) {
 		// Execute this filter only once
 		if ($this->isFirstCall()) {
 			$request = $this->getContext()->getRequest();
-			$user    = $this->getContext()->getUser();
+			$user = $this->getContext()->getUser();
 			if ($user->getProfile() != null) {
 				$language = $user->getProfile()->getCulture();
 			} else {

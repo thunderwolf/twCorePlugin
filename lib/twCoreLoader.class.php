@@ -13,6 +13,7 @@ class twCoreLoader
 			$memcache = new twCoreMemcache($memcache_config);
 			self::loadTwVersionArray($memcache);
 			self::loadTwSettingsArray($memcache);
+			self::loadTwRoutingArray($memcache);
 
 		} catch (Exception $e) {
 			return $e->getMessage();
@@ -58,6 +59,25 @@ class twCoreLoader
 		sfConfig::set('tw_settings_array', $settings);
 	}
 
+	static protected function loadTwRoutingArray($memcache) {
+		if ($memcache != false) {
+			$routing_key = sfConfig::get('tw_memcache_kp').'.core.routing';
+			$routing = $memcache->get($routing_key);
+			if (empty($routing)) {
+				$routing = self::loadTwRoutingArrayFromDB();
+				if (!empty($routing)) {
+					$memcache->set($routing_key, $routing);
+				}
+			}
+		} else {
+			$routing = self::loadTwRoutingArrayFromDB();
+		}
+		if (!is_array($routing)) {
+			$routing = array();
+		}
+		sfConfig::set('tw_routing_array', $routing);
+	}
+
 	static protected function loadTwVersionArrayFromDB() {
 		if (is_null(self::$conn)) {
 			self::createConnection();
@@ -85,6 +105,17 @@ class twCoreLoader
 		foreach($pre as $row) {
 			$out[$row['name']] = $row['value'];
 		}
+		return $out;
+	}
+
+	static protected function loadTwRoutingArrayFromDB() {
+		if (is_null(self::$conn)) {
+			self::createConnection();
+		}
+		$sql = 'SELECT * FROM tw_routing ORDER by pos DESC';
+		$sth = self::$conn->prepare($sql);
+		$sth->execute();
+		$out = $sth->fetchAll(PDO::FETCH_ASSOC);
 		return $out;
 	}
 
