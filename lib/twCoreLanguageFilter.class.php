@@ -5,9 +5,14 @@ class twCoreLanguageFilter extends sfFilter {
 		if ($this->isFirstCall()) {
 			$request = $this->getContext()->getRequest();
 			$user = $this->getContext()->getUser();
-			if ($user->getProfile() != null) {
-				$language = $user->getProfile()->getCulture();
-			} else {
+			try {
+				$profile = $user->getProfile();
+				if (is_object($profile)) {
+					$language = $profile->getCulture();
+				} else {
+					$language = $request->getPreferredCulture(array('en', 'pl'));
+				}
+			} catch (Exception $e) {
 				$language = $request->getPreferredCulture(array('en', 'pl'));
 			}
 			$user->setCulture($language);

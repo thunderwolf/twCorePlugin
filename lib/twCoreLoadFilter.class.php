@@ -51,7 +51,6 @@ class twCoreLoadFilter extends sfFilter {
 		$c = new Criteria();
 		$c->addJoin(twPluginPeer::STATUS_ID, twPluginStatusPeer::ID);
 		$c->add(twPluginStatusPeer::CODE, 'activated');
-		$c->addAscendingOrderByColumn(twPluginPeer::POS);
 		$plugins_obj_array = twPluginPeer::doSelectWithI18n($c);
 		$plugins_array = array();
 		foreach ($plugins_obj_array as $plugin_obj) {
