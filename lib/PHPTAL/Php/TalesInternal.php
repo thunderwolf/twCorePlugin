@@ -10,7 +10,6 @@
  * @author   Moritz Bechler <mbechler@eenterphace.org>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: TalesInternal.php 2949 2009-11-07 20:35:23Z ldath $
  * @link     http://phptal.org/
 */
 

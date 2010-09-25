@@ -6,7 +6,6 @@
  * @package     twCorePlugin
  * @subpackage  config
  * @author      Arkadiusz Tułodziecki
- * @version     SVN: $Id: twCorePluginConfiguration.class.php 3310 2010-09-04 22:01:55Z ldath $
  */
 class twCorePluginConfiguration extends sfPluginConfiguration {
 	const VERSION = '1.0.0-DEV';

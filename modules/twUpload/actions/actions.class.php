@@ -6,7 +6,6 @@
  * @package    zoolandia
  * @subpackage twUpload
  * @author     Your name here
- * @version    SVN: $Id: actions.class.php 2949 2009-11-07 20:35:23Z ldath $
  */
 class twUploadActions extends sfActions
 {

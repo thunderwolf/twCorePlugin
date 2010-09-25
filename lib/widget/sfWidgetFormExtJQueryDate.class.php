@@ -14,7 +14,6 @@
  * @package    symfony
  * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormExtJQueryDate.class.php 2949 2009-11-07 20:35:23Z ldath $
  */
 class sfWidgetFormExtJQueryDate extends sfWidgetFormDate
 {

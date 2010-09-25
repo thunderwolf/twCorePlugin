@@ -6,7 +6,6 @@
  * @package    subskrypcja
  * @subpackage homepage
  * @author     Arkadiusz Tułodziecki
- * @version    SVN: $Id: actions.class.php 2751 2009-02-11 23:16:05Z ldath $
  */
 class twMainActions extends sfActions
 {

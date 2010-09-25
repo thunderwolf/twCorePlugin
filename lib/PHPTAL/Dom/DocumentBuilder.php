@@ -9,7 +9,6 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: DocumentBuilder.php 2949 2009-11-07 20:35:23Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -125,7 +124,7 @@ class PHPTAL_Dom_DocumentBuilder
                 $attr_namespace_uri = ''; // default NS. Attributes don't inherit namespace per XMLNS spec
             }
 
-            if ($this->_xmlns->isHandledNamespace($attr_namespace_uri) 
+            if ($this->_xmlns->isHandledNamespace($attr_namespace_uri)
                 && !$this->_xmlns->isValidAttributeNS($attr_namespace_uri, $local_name)) {
                 throw new PHPTAL_ParserException("Unsupported attribute '$qname'");
             }

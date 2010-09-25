@@ -9,7 +9,6 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: PHPTAL.php 2949 2009-11-07 20:35:23Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -512,7 +511,7 @@ class PHPTAL
     /**
      * Set a context variable.
      * Use it by setting properties on PHPTAL object.
-     * 
+     *
      * @param string $varname
      * @param mixed $value
      * @return void
@@ -524,7 +523,7 @@ class PHPTAL
 
     /**
      * Set a context variable.
-     * 
+     *
      * @see PHPTAL::__set()
      * @param string $varname name of the variable
      * @param mixed $value value of the variable

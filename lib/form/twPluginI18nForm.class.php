@@ -5,7 +5,6 @@
  *
  * @package    form
  * @subpackage tw_plugin_i18n
- * @version    SVN: $Id: twPluginI18nForm.class.php 3047 2010-01-24 16:53:33Z ldath $
  */
 class twPluginI18nForm extends BasetwPluginI18nForm
 {

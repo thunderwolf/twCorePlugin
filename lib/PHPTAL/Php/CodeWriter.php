@@ -9,7 +9,6 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: CodeWriter.php 2949 2009-11-07 20:35:23Z ldath $
  * @link     http://phptal.org/
  */
 /**
@@ -20,7 +19,7 @@
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_CodeWriter
-{    
+{
     /**
      * max id of variable to give as temp
      */
@@ -67,7 +66,7 @@ class PHPTAL_Php_CodeWriter
 
     /**
      * set full '<!DOCTYPE...>' string to output later
-     * 
+     *
      * @param string $dt
      * @return void
      */
@@ -78,7 +77,7 @@ class PHPTAL_Php_CodeWriter
 
     /**
      * set full '<?xml ?>' string to output later
-     * 
+     *
      * @param string $dt
      * @return void
      */
@@ -90,7 +89,7 @@ class PHPTAL_Php_CodeWriter
     /**
      * functions later generated and checked for existence will have this prefix added
      * (poor man's namespace)
-     * 
+     *
      * @param string $prefix
      * @return void
      */
@@ -109,7 +108,7 @@ class PHPTAL_Php_CodeWriter
 
     /**
      * @see PHPTAL_Php_State::setTalesMode()
-     * 
+     *
      * @param string $mode
      * @return string
      */

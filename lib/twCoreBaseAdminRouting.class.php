@@ -13,7 +13,6 @@
  * @package    symfony
  * @subpackage plugin
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: twCoreBaseAdminRouting.class.php 3306 2010-09-04 18:37:19Z ldath $
  */
 class twCoreBaseAdminRouting
 {

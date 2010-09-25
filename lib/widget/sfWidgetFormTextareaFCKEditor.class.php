@@ -16,7 +16,6 @@
  * @package    symfony
  * @subpackage widget
  * @author     Denny Reeh <denny.reeh@gmail.com>
- * @version    SVN: $Id: sfWidgetFormTextareaFCKEditor.class.php 2949 2009-11-07 20:35:23Z ldath $
  */
 class sfWidgetFormTextareaFCKEditor extends sfWidgetFormTextarea
 {

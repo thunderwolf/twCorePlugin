@@ -9,7 +9,6 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Tales.php 2949 2009-11-07 20:35:23Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -29,9 +28,9 @@ interface PHPTAL_Tales
 
  
  /**
-  * translates TALES expression with alternatives into single PHP expression. 
+  * translates TALES expression with alternatives into single PHP expression.
   * Identical to phptal_tales() for singular expressions.
-  * 
+  *
   * Please use this function rather than PHPTAL_Php_TalesInternal methods.
   *
   * @see PHPTAL_Php_TalesInternal::compileToPHPStatements()

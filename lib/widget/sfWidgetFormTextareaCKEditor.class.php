@@ -7,7 +7,6 @@
  * @package    twCorePlugin
  * @subpackage widget
  * @author     Arkadiusz Tułodziecki <ldath@thunderwolf.net>
- * @version    SVN: $Id: sfWidgetFormTextareaCKEditor.class.php 3047 2010-01-24 16:53:33Z ldath $
  */
 class sfWidgetFormTextareaCKEditor extends sfWidgetFormTextarea
 {

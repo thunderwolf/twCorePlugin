@@ -9,7 +9,6 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Attr.php 2949 2009-11-07 20:35:23Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -81,7 +80,7 @@ class PHPTAL_Dom_Attr
     
     /**
      * Returns true if this attribute is ns declaration (xmlns="...")
-     *  
+     *
      * @return bool
      */
     function isNamespaceDeclaration()

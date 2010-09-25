@@ -9,7 +9,6 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Context.php 2949 2009-11-07 20:35:23Z ldath $
  * @link     http://phptal.org/
  */
 /**
@@ -272,7 +271,7 @@ class PHPTAL_Context
             throw new PHPTAL_VariableNotFoundException(ucfirst(get_class($base))." object {$basename}doesn't have method/property named '$current'$pathinfo");
         }
         throw new PHPTAL_VariableNotFoundException(trim("Attempt to read property '$current'$pathinfo from ".gettype($base)." value {$basename}"));
-    }    
+    }
     
     /**
      * Resolve TALES path starting from the first path element.
@@ -401,7 +400,7 @@ class PHPTAL_Context
         }
 
         return $base;
-    } 
+    }
 }
 
 /**

@@ -9,7 +9,6 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Node.php 2949 2009-11-07 20:35:23Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -110,7 +109,7 @@ abstract class PHPTAL_Dom_Node
         if ($prop === 'node') return $this;
         if ($prop === 'generator') return self::$_codewriter_bc_hack_;
         if ($prop === 'attributes') {
-            $tmp = array(); 
+            $tmp = array();
             foreach($this->getAttributeNodes() as $att) {
                 $tmp[$att->getQualifiedName()] = $att->getValueEscaped();
             }
