@@ -3,6 +3,13 @@ twCore plugin
 
 The `twCorePlugin` is core plugin for almost all Thunderwolf System Plugins
 
+
+    [yml]
+    all:
+      .settings:
+        #Thunderwolf Core Modifier
+        tw_admin:               on
+
 Changelog
 ---------
 
