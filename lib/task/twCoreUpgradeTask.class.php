@@ -2,7 +2,7 @@
 
 class twCoreUpgradeTask extends sfBaseTask
 {
-	const VERSION = 3;
+	const VERSION = 4;
 
 	protected function configure() {
 		$this->addArguments(array(
@@ -42,7 +42,7 @@ EOF;
 		}
 
 		if ($version == self::VERSION) {
-			$this->logSection('asset', 'System allredy in version: '.self::VERSION, null, 'INFO');
+			$this->logSection('core', 'System allredy in version: '.self::VERSION, null, 'INFO');
 			return;
 		}
 
@@ -57,9 +57,9 @@ EOF;
 		}
 
 		if ($version == self::VERSION) {
-			$this->logSection('asset', 'Upgrade complete. New version is: '.self::VERSION, null, 'INFO');
+			$this->logSection('core', 'Upgrade complete. New version is: '.self::VERSION, null, 'INFO');
 		} else {
-			$this->logSection('asset', 'Upgrade NOT! complete. Version: '.$version, null, 'INFO');
+			$this->logSection('core', 'Upgrade NOT! complete. Version: '.$version, null, 'INFO');
 		}
 		return;
 	}
@@ -80,7 +80,7 @@ EOF;
 		$statement->closeCursor();
 		$cms_version = !empty($resultset['value']) ? $resultset['value'] : null;
 		if ($cms_version < 2 and !is_null($cms_version)) {
-			$this->logSection('asset', 'First upgrade twBasicCmsPlugin!', null, 'INFO');
+			$this->logSection('core', 'First upgrade twBasicCmsPlugin!', null, 'INFO');
 			exit;
 		}
 
@@ -263,5 +263,52 @@ EOF;
 
 		$connection->commit();
 		return 3;
+	}
+	
+	protected function upgradeVersion3($connection) {
+		$connection->beginTransaction();
+		
+		$query = 'ALTER TABLE `tw_plugin` DROP `pos`';
+		$statement = $connection->prepare($query);
+		$statement->execute();
+		
+		$query = 'DROP TABLE IF EXISTS `tw_plugin_module_i18n`';
+		$statement = $connection->prepare($query);
+		$statement->execute();
+		
+		$query = 'DROP TABLE IF EXISTS `tw_plugin_module`';
+		$statement = $connection->prepare($query);
+		$statement->execute();
+
+		$query = 'DROP TABLE IF EXISTS `sf_guard_user_profile`';
+		$statement = $connection->prepare($query);
+		$statement->execute();
+		
+		$query = '
+CREATE TABLE IF NOT EXISTS `tw_routing`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`plugin_id` INTEGER  NOT NULL,
+	`pos` INTEGER  NOT NULL,
+	`route` VARCHAR(250)  NOT NULL,
+	`url` VARCHAR(250)  NOT NULL,
+	`type` INTEGER  NOT NULL,
+	`name` VARCHAR(250)  NOT NULL,
+	`instructions` TEXT,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY `url` (`url`),
+	KEY `pos`(`pos`),
+	INDEX `tw_routing_FI_1` (`plugin_id`),
+	CONSTRAINT `tw_routing_FK_1`
+		FOREIGN KEY (`plugin_id`)
+		REFERENCES `tw_plugin` (`id`)
+) ENGINE=InnoDB;
+		';
+		$statement = $connection->prepare($query);
+		$statement->execute();
+		
+		$connection->commit();
+		
+		return 4;
 	}
 }
