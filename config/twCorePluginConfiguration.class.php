@@ -15,7 +15,7 @@ class twCorePluginConfiguration extends sfPluginConfiguration {
 	 */
 	public function initialize() {
 		if (!defined('THUNDERWOLF_VER')) {
-			define('THUNDERWOLF_VER', '0.9.7.20100904 (ALPHA7)');
+			define('THUNDERWOLF_VER', '0.9.8.20101019 (BETA 1)');
 		}
 //		$plugins = $this->configuration->getPlugins();
 //		var_dump($plugins);
