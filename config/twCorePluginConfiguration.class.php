@@ -31,7 +31,7 @@ class twCorePluginConfiguration extends sfPluginConfiguration {
 		sfConfig::set('sf_enabled_modules', $enabled);
 
 		if (!sfConfig::get('tw_admin_module_web_dir')) {
-			sfConfig::set('tw_admin_module_web_dir', '/twCorePlugin');
+			sfConfig::set('tw_admin_module_web_dir', '/twAdminPlugin');
 		}
 
 		// ADMIN ROUTING
