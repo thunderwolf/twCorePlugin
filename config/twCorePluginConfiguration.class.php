@@ -22,7 +22,6 @@ class twCorePluginConfiguration extends sfPluginConfiguration {
 
 		/* Enabling all need modules */
 		$enabled = sfConfig::get('sf_enabled_modules', array());
-		array_push($enabled, 'twMain');
 		array_push($enabled, 'twDefault');
 		array_push($enabled, 'twPlugin');
 		array_push($enabled, 'twSettings');
@@ -37,10 +36,6 @@ class twCorePluginConfiguration extends sfPluginConfiguration {
 
 		// ADMIN ROUTING
 		if (sfConfig::get('sf_tw_admin', false) == true) {
-			if (sfConfig::get('app_tw_core_base_plugin_routes_register', true) && in_array('twMain', sfConfig::get('sf_enabled_modules', array()))) {
-				$this->dispatcher->connect('routing.load_configuration', array('twCoreBaseAdminRouting', 'listenToRoutingLoadConfigurationEvent'));
-			}
-
 			foreach (array('twPlugin', 'twSettings') as $module) {
 				if (in_array($module, sfConfig::get('sf_enabled_modules'))) {
 					$this->dispatcher->connect('routing.load_configuration', array('twCoreBaseAdminRouting', 'addRouteFor'.str_replace('tw', '', $module)));

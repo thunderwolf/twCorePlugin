@@ -14,15 +14,7 @@
  * @subpackage plugin
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
-class twCoreBaseAdminRouting
-{
-	static public function listenToRoutingLoadConfigurationEvent(sfEvent $event)
-	{
-		$r = $event->getSubject();
-
-		$r->prependRoute('change_language', new sfRoute('/change_language', array('module' => 'twMain', 'action' => 'language')));
-	}
-
+class twCoreBaseAdminRouting {
 	static public function addRouteForPlugin(sfEvent $event)
 	{
 		$event->getSubject()->prependRoute('tw_plugin', new sfPropelRouteCollection(array(
