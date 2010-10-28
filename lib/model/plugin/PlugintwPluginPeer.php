@@ -24,4 +24,10 @@ class PlugintwPluginPeer extends BasetwPluginPeer
 	public static function doSort($order, $con = null) {
 		return sfPropelActAsSortableBehavior::doSort('twPluginPeer', $order, $con);
 	}
+
+	public static function doSelectForCode($code, PropelPDO $con = null) {
+		$c = new Criteria();
+		$c->add(self::CODE, $code);
+		return self::doSelectOne($c, $con);
+	}
 }
