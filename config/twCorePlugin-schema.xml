@@ -90,5 +90,19 @@
       <unique-column name="name" />
     </unique>
   </table>
+  
+  <table name="tw_user" phpName="twUser">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="username" type="varchar" size="128" required="true" />
+    <unique>
+      <unique-column name="username" />
+    </unique>
+    <column name="algorithm" type="varchar" size="128" required="true" default="sha1" />
+    <column name="salt" type="varchar" size="128" required="true" />
+    <column name="password" type="varchar" size="128" required="true" />
+    <column name="created_at" type="timestamp" />
+    <column name="last_login" type="timestamp" />
+    <column name="is_active" type="boolean" required="true" default="1" />
+  </table>
 
 </database>
