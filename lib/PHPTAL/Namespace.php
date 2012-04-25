@@ -9,11 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Namespace.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Attribute.php';
-require_once 'PHPTAL/NamespaceAttribute.php';
 
 /**
  * @see PHPTAL_NamespaceAttribute
@@ -24,9 +23,13 @@ abstract class PHPTAL_Namespace
 {
     private $prefix, $namespace_uri;
     protected $_attributes;
-    
+
     public function __construct($prefix, $namespace_uri)
     {
+        if (!$namespace_uri || !$prefix) {
+            throw new PHPTAL_ConfigurationException("Can't create namespace with empty prefix or namespace URI");
+        }
+
         $this->_attributes = array();
         $this->prefix = $prefix;
         $this->namespace_uri = $namespace_uri;

@@ -9,13 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: PHPTAL.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Tales.php';
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Debug.php';
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Id.php';
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Cache.php';
 
 /**
  * @package PHPTAL

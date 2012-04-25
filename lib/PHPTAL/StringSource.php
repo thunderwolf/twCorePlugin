@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: StringSource.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 /**
@@ -28,7 +29,7 @@ class PHPTAL_StringSource implements PHPTAL_Source
 
     public function getLastModifiedTime()
     {
-        if (substr($this->_realpath,0,8) !== self::NO_PATH_PREFIX && file_exists($this->_realpath)) {
+        if (substr($this->_realpath, 0, 8) !== self::NO_PATH_PREFIX && file_exists($this->_realpath)) {
             return @filemtime($this->_realpath);
         }
         return 0;

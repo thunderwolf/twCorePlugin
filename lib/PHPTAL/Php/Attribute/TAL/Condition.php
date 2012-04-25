@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Condition.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -56,7 +57,7 @@ implements PHPTAL_Php_TalesChainReader
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
     }
 
 
@@ -84,7 +85,8 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
-        throw new PHPTAL_ParserException('\'default\' keyword not allowed on conditional expressions');
+        throw new PHPTAL_ParserException('\'default\' keyword not allowed on conditional expressions',
+                    $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
     }
 
 }

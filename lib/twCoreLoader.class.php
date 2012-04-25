@@ -135,5 +135,4 @@ class twCoreLoader
 			}
 		}
 	}
-
 }

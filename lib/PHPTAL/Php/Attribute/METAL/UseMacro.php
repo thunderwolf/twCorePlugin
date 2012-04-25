@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: UseMacro.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -60,7 +61,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // external macro or ${macroname}, use PHPTAL at runtime to resolve it
         else {
             $code = $codewriter->interpolateTalesVarsInString($this->expression);
-            $codewriter->pushCode('$tpl->_executeMacroOfTempalte('.$code.', $_thistpl)');
+            $codewriter->pushCode('$tpl->_executeMacroOfTemplate('.$code.', $_thistpl)');
         }
 
         $this->popSlots($codewriter);
@@ -106,7 +107,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
      */
     private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Dom_Node $phpelement)
     {
-        if (false == ($phpelement instanceOf PHPTAL_Dom_Element)) {
+        if (false == ($phpelement instanceof PHPTAL_Dom_Element)) {
             return;
         }
 

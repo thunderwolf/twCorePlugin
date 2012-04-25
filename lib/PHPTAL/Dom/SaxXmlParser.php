@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: SaxXmlParser.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -116,7 +117,7 @@ class PHPTAL_Dom_SaxXmlParser
             $builder->onDocumentStart();
 
             $i=0;
-            // remove BOM (utf8 byte order mark)...
+            // remove BOM (UTF-8 byte order mark)...
             if (substr($src, 0, 3) === self::BOM_STR) {
                 $i=3;
             }
@@ -131,7 +132,7 @@ class PHPTAL_Dom_SaxXmlParser
                             $mark = $i; // mark tag start
                             $state = self::ST_LT;
                         } elseif (!self::isWhiteChar($c)) {
-                            $this->raiseError("Characters found before the beginning of the document!");
+                            $this->raiseError("Characters found before beginning of the document! (wrap document in < tal:block > to avoid this error)");
                         }
                         break;
 
@@ -173,7 +174,7 @@ class PHPTAL_Dom_SaxXmlParser
                     case self::ST_TAG_NAME:
                         if (self::isWhiteChar($c) || $c === '/' || $c === '>') {
                             $tagname = substr($src, $mark, $i-$mark);
-                            if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");
+                            if (!$this->isValidQName($tagname)) $this->raiseError("Invalid tag name '$tagname'");
 
                             if ($c === '/') {
                                 $state = self::ST_TAG_SINGLE;
@@ -198,7 +199,7 @@ class PHPTAL_Dom_SaxXmlParser
 
                     case self::ST_TAG_SINGLE:
                         if ($c !== '>') {
-                            $this->raiseError("Expected '/>', but found '/$c' inside tag '$tagname'");
+                            $this->raiseError("Expected '/>', but found '/$c' inside tag < $tagname >");
                         }
                         $mark = $i+1;   // mark text start
                         $state = self::ST_TEXT;
@@ -216,10 +217,10 @@ class PHPTAL_Dom_SaxXmlParser
                             $state = self::ST_TAG_SINGLE;
                         } elseif (self::isWhiteChar($c)) {
                             $state = self::ST_TAG_ATTRIBUTES;
-                        } elseif ($state === self::ST_TAG_ATTRIBUTES) {
+                        } elseif ($state === self::ST_TAG_ATTRIBUTES && $this->isValidQName($c)) {
                             $mark = $i; // mark attribute key start
                             $state = self::ST_ATTR_KEY;
-                        } else $this->raiseError("Unexpected character '$c' between attributes of <$tagname>");
+                        } else $this->raiseError("Unexpected character '$c' between attributes of < $tagname >");
                         break;
 
                     case self::ST_COMMENT:
@@ -229,7 +230,7 @@ class PHPTAL_Dom_SaxXmlParser
                                 $this->raiseError("Ill-formed comment. XML comments are not allowed to contain '--' or start/end with '-': ".substr($src, $mark+4, $i-$mark+1-7));
                             }
 
-                            $builder->onComment($this->checkEncoding(substr($src, $mark, $i-$mark+1)));
+                            $builder->onComment($this->checkEncoding(substr($src, $mark+4, $i-$mark+1-7)));
                             $mark = $i+1; // mark text start
                             $state = self::ST_TEXT;
                         }
@@ -280,17 +281,20 @@ class PHPTAL_Dom_SaxXmlParser
                         if ($c === '=' || self::isWhiteChar($c)) {
                             $attribute = substr($src, $mark, $i-$mark);
                             if (!$this->isValidQName($attribute)) {
-                                $this->raiseError("Invalid attribute name '$attribute'");
+                                $this->raiseError("Invalid attribute name '$attribute' in < $tagname >");
                             }
                             if (isset($attributes[$attribute])) {
-                                $this->raiseError("Attribute '$attribute' on '$tagname' is defined more than once");
+                                $this->raiseError("Attribute $attribute in < $tagname > is defined more than once");
                             }
 
                             if ($c === '=') $state = self::ST_ATTR_VALUE;
                             else /* white char */ $state = self::ST_ATTR_EQ;
                         } elseif ($c === '/' || $c==='>') {
                             $attribute = substr($src, $mark, $i-$mark);
-                            $this->raiseError("Could not find value for attribute $attribute before end of tag <$tagname>");
+                            if (!$this->isValidQName($attribute)) {
+                                $this->raiseError("Invalid attribute name '$attribute'");
+                            }
+                            $this->raiseError("Attribute $attribute does not have value (found end of tag instead of '=')");
                         }
                         break;
 
@@ -298,7 +302,7 @@ class PHPTAL_Dom_SaxXmlParser
                         if ($c === '=') {
                             $state = self::ST_ATTR_VALUE;
                         } elseif (!self::isWhiteChar($c)) {
-                            $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
+                            $this->raiseError("Attribute $attribute in < $tagname > does not have value (found character '$c' instead of '=')");
                         }
                         break;
 
@@ -309,13 +313,17 @@ class PHPTAL_Dom_SaxXmlParser
                             $state = self::ST_ATTR_QUOTE;
                             $mark = $i+1; // mark attribute real value start
                         } else {
-                            $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
+                            $this->raiseError("Value of attribute $attribute in < $tagname > is not in quotes (found character '$c' instead of quote)");
                         }
                         break;
 
                     case self::ST_ATTR_QUOTE:
                         if ($c === $quoteStyle) {
                             $attributes[$attribute] = $this->sanitizeEscapedText($this->checkEncoding(substr($src, $mark, $i-$mark)));
+
+                            // PHPTAL's code generator assumes input is escaped for double-quoted strings. Single-quoted attributes need to be converted.
+                            // FIXME: it should be escaped at later stage.
+                            $attributes[$attribute] = str_replace('"',"&quot;", $attributes[$attribute]);
                             $state = self::ST_TAG_BETWEEN_ATTRIBUTE;
                         }
                         break;
@@ -326,7 +334,7 @@ class PHPTAL_Dom_SaxXmlParser
             {
                 if ($i > $mark) {
                     $text = substr($src, $mark, $i-$mark);
-                    if (!ctype_space($text)) $this->raiseError("Characters found after end of the root element");
+                    if (!ctype_space($text)) $this->raiseError("Characters found after end of the root element (wrap document in < tal:block > to avoid this error)");
                 }
             } else {
                 if ($state === self::ST_ROOT) {
@@ -356,15 +364,14 @@ class PHPTAL_Dom_SaxXmlParser
     private function checkEncoding($str)
     {
         if ($str === '') return '';
-        
+
         if ($this->input_encoding === 'UTF-8') {
-            
+
             // $match expression below somehow triggers quite deep recurrency and stack overflow in preg
             // to avoid this, check string bit by bit, omitting ASCII fragments.
-            if (strlen($str) > 200)
-            {
-                $chunks = preg_split('/(?>[\x09\x0A\x0D\x20-\x7F]+)/',$str,NULL,PREG_SPLIT_NO_EMPTY);
-                foreach($chunks as $chunk) {
+            if (strlen($str) > 200) {
+                $chunks = preg_split('/(?>[\x09\x0A\x0D\x20-\x7F]+)/',$str,null,PREG_SPLIT_NO_EMPTY);
+                foreach ($chunks as $chunk) {
                     if (strlen($chunk) < 200) {
                         $this->checkEncoding($chunk);
                     }
@@ -385,12 +392,12 @@ class PHPTAL_Dom_SaxXmlParser
                . '|\xF4[\x80-\x8F][\x80-\xBF]{2}';    // plane 16
 
             if (!preg_match('/^(?:(?>'.$match.'))+$/s',$str)) {
-                $res = preg_split('/((?>'.$match.')+)/s',$str,NULL,PREG_SPLIT_DELIM_CAPTURE);
+                $res = preg_split('/((?>'.$match.')+)/s',$str,null,PREG_SPLIT_DELIM_CAPTURE);
                 for($i=0; $i < count($res); $i+=2)
                 {
                     $res[$i] = self::convertBytesToEntities(array(1=>$res[$i]));
                 }
-                $this->raiseError("Invalid UTF-8 bytes: ".implode('',$res));
+                $this->raiseError("Invalid UTF-8 bytes: ".implode('', $res));
             }
         }
         if ($this->input_encoding === 'ISO-8859-1') {
@@ -398,8 +405,8 @@ class PHPTAL_Dom_SaxXmlParser
             // http://www.w3.org/TR/2006/REC-xml11-20060816/#NT-RestrictedChar
             $forbid = '/((?>[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F]+))/s';
 
-            if (preg_match($forbid,$str)) {
-                $str = preg_replace_callback($forbid,array('self','convertBytesToEntities'),$str);
+            if (preg_match($forbid, $str)) {
+                $str = preg_replace_callback($forbid, array('self', 'convertBytesToEntities'), $str);
                 $this->raiseError("Invalid ISO-8859-1 characters: ".$str);
             }
         }
@@ -412,6 +419,7 @@ class PHPTAL_Dom_SaxXmlParser
      * Changes all bytes to hexadecimal XML entities
      *
      * @param array $m first array element is used for input
+     *
      * @return string
      */
     private static function convertBytesToEntities(array $m)
@@ -429,23 +437,25 @@ class PHPTAL_Dom_SaxXmlParser
      */
     private function sanitizeEscapedText($str)
     {
-        $str = str_replace('&apos;','&#39;', $str); // PHP's html_entity_decode doesn't seem to support that!
+        $str = str_replace('&apos;', '&#39;', $str); // PHP's html_entity_decode doesn't seem to support that!
 
-        /* this is ugly kludge to keep <?php ?> blocks unescaped (even in attributes) */
+        /* <?php ?> blocks can't reliably work in attributes (due to escaping impossible in XML)
+           so they have to be converted into special TALES expression
+        */
         $types = ini_get('short_open_tag')?'php|=|':'php';
-        $split = preg_split("/(<\?(?:$types).*?\?>)/", $str, null, PREG_SPLIT_DELIM_CAPTURE);
+        $str = preg_replace_callback("/<\?($types)(.*?)\?>/", array('self', 'convertPHPBlockToTALES'), $str);
 
-        for($i=0; $i < count($split); $i+=2)
-        {
-            // escape invalid entities and < >
-            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $split[$i]),array('<'=>'&lt;', ']]>'=>']]&gt;'));
-        }
-        return implode('', $split);
+        // corrects all non-entities and neutralizes potentially problematic CDATA end marker
+        $str = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $str), array('<'=>'&lt;', ']]>'=>']]&gt;'));
+
+        return $str;
     }
 
-    public static function _htmlspecialchars($m)
+    private static function convertPHPBlockToTALES($m)
     {
-        return htmlspecialchars($m[0]);
+        list(, $type, $code) = $m;
+        if ($type === '=') $code = 'echo '.$code;
+        return '${structure phptal-internal-php-block:'.rawurlencode($code).'}';
     }
 
     public function getSourceFile()

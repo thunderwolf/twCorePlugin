@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Domain.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -30,7 +31,7 @@ class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
         // ensure a domain stack exists or create it
         $codewriter->doIf('!isset($_i18n_domains)');
         $codewriter->pushCode('$_i18n_domains = array()');
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
 
         $expression = $codewriter->interpolateTalesVarsInString($this->expression);
 

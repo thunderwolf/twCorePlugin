@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Tales.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 /**
@@ -27,11 +28,8 @@ class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
             $mode = 'tales';
 
         if ($mode != 'php' && $mode != 'tales') {
-            throw new PHPTAL_TemplateException(
-                "Unsupported TALES mode '$mode'",
-                $this->phpelement->getSourceFile(),
-                $this->phpelement->getSourceLine()
-            );
+            throw new PHPTAL_TemplateException("Unsupported TALES mode '$mode'",
+                $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
         }
 
         $this->_oldMode = $codewriter->setTalesMode($mode);

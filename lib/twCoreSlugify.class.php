@@ -92,4 +92,3 @@ class twCoreSlugify
 		return $text;
 	}
 }
-?>

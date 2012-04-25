@@ -10,9 +10,10 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @author   Iván Montes <drslump@pollinimini.net>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: RepeatController.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
-  
+
 /**
  * Stores tal:repeat information during template execution.
  *
@@ -24,7 +25,7 @@
  * ...
  * are provided by this instance.
  *
- * 'repeat' is an StdClass instance created to handle RepeatControllers,
+ * 'repeat' is an stdClass instance created to handle RepeatControllers,
  * 'item' is an instance of this class.
  *
  * @package PHPTAL
@@ -39,11 +40,11 @@ class PHPTAL_RepeatController implements Iterator
     private $validOnNext;
 
     private $uses_groups = false;
-    
+
     protected $iterator;
     public $index;
     public $end;
-    
+
     /**
      * computed lazily
      */
@@ -186,11 +187,6 @@ class PHPTAL_RepeatController implements Iterator
     private function initializeGroups()
     {
         if (!$this->uses_groups) {
-            if (!class_exists('PHPTAL_RepeatControllerGroups')) {
-                PHPTAL::setIncludePath();
-                require_once "PHPTAL/RepeatControllerGroups.php";
-                PHPTAL::restoreIncludePath();
-            }
             $this->groups = new PHPTAL_RepeatControllerGroups();
             $this->uses_groups = true;
         }
@@ -232,7 +228,7 @@ class PHPTAL_RepeatController implements Iterator
                 // Compare the current one with the previous in the dictionary
                 $res = $this->groups->first($this->current);
                 return is_bool($res) ? $res : $this->groups;
-                
+
             case 'last':
                 $this->initializeGroups();
                 // Compare the next one with the dictionary
@@ -267,6 +263,7 @@ class PHPTAL_RepeatController implements Iterator
      * Converts an integer number (1 based) to a sequence of letters
      *
      * @param int $int  The number to convert
+     *
      * @return String   The letters equivalent as a, b, c-z ... aa, ab, ac-zz ...
      * @access protected
      */
@@ -288,6 +285,7 @@ class PHPTAL_RepeatController implements Iterator
      * Converts an integer number (1 based) to a roman numeral
      *
      * @param int $int  The number to convert
+     *
      * @return String   The roman numeral
      * @access protected
      */

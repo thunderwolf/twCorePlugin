@@ -9,13 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: METAL.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Attribute/METAL/DefineMacro.php';
-require_once 'PHPTAL/Php/Attribute/METAL/UseMacro.php';
-require_once 'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
-require_once 'PHPTAL/Php/Attribute/METAL/FillSlot.php';
 
 /**
  * @package PHPTAL

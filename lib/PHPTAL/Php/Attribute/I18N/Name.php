@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Name.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -40,8 +41,7 @@ class PHPTAL_Php_Attribute_I18N_Name extends PHPTAL_Php_Attribute
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->pushCode('$_translator->setVar('.$codewriter->str($this->expression).', ob_get_contents())');
-        $codewriter->pushCode('ob_end_clean()');
+        $codewriter->pushCode('$_translator->setVar('.$codewriter->str($this->expression).', ob_get_clean())');
     }
 }
 

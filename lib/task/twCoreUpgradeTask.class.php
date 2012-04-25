@@ -1,19 +1,18 @@
 <?php
 
-class twCoreUpgradeTask extends sfBaseTask
-{
-	const VERSION = 4;
-
+class twCoreUpgradeTask extends sfBaseTask {
+	const VERSION = 5;
+	
 	protected function configure() {
 		$this->addArguments(array(
 			new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
 		));
-
+		
 		$this->addOptions(array(
 			new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
 			new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'propel'))
 		);
-
+		
 		$this->namespace = 'twcore';
 		$this->name = 'upgrade';
 		$this->briefDescription = '';
@@ -23,36 +22,35 @@ Call it with:
   [php symfony twcore:upgrade admin|INFO]
 EOF;
 	}
-
+	
 	protected function execute($arguments = array(), $options = array()) {
 		// initialize the database connection
 		$databaseManager = new sfDatabaseManager($this->configuration);
 		$connection = $databaseManager->getDatabase($options['connection'] ? $options['connection'] : null)->getConnection();
-
-		$query = 'SELECT value FROM %s WHERE %s = :name';
-		$query = sprintf($query, twVersionPeer::TABLE_NAME, twVersionPeer::NAME);
-		$statement = $connection->prepare($query);
-		$statement->bindValue(':name', 'db.core.base', PDO::PARAM_STR);
-		$statement->execute();
-		$resultset = $statement->fetch(PDO::FETCH_ASSOC);
-		$statement->closeCursor();
-		$version = !empty($resultset['value']) ? $resultset['value'] : 2;
-		if ($version < 2) {
-			$version = 2;
+		try {
+			$tw_version = twVersionQuery::create()->findOneByName('db.core.base');
+		} catch (Exception $e) {
+			$this->installPlugin($connection);
+			$this->logSection('core', 'Install complete. Your version is: '.self::VERSION, null, 'INFO');
+			return true;
 		}
-
+		
+		$version = !is_null($tw_version) ? $tw_version->getValue() : $this->setActualVersion($connection);
+		if ($version < 4) {
+			throw new sfCommandException(sprintf('This %d twcore version is to old for upgrade by twCorePlugin v0.4.x. Minimum version 4 of database is required', $version));
+		}
+		
 		if ($version == self::VERSION) {
 			$this->logSection('core', 'System allredy in version: '.self::VERSION, null, 'INFO');
-			return;
+			return true;
 		}
-
+		
 		$i = 0;
 		while ($version != self::VERSION && $i < 10) {
-			$version = $this->upgradePlugin($version, $connection);
-			$query = "REPLACE INTO tw_version (name, value) VALUES ('db.core.base', :ver)";
-			$statement = $connection->prepare($query);
-			$statement->bindValue(':ver', $version, PDO::PARAM_INT);
-			$statement->execute();
+			$method = 'upgradeVersion'.$version;
+			$version = $this->$method($connection);
+			$tw_version->setValue($version);
+			$tw_version->save($connection);
 			$i++;
 		}
 
@@ -61,254 +59,115 @@ EOF;
 		} else {
 			$this->logSection('core', 'Upgrade NOT! complete. Version: '.$version, null, 'INFO');
 		}
-		return;
-	}
-
-
-	protected function upgradePlugin($version, $connection) {
-		$method = 'upgradeVersion'.$version;
-		return $this->$method($connection);
-	}
-
-	protected function upgradeVersion2($connection) {
-		$query = 'SELECT value FROM %s WHERE %s = :name';
-		$query = sprintf($query, twVersionPeer::TABLE_NAME, twVersionPeer::NAME);
-		$statement = $connection->prepare($query);
-		$statement->bindValue(':name', 'db.core.basicCms', PDO::PARAM_STR);
-		$statement->execute();
-		$resultset = $statement->fetch(PDO::FETCH_ASSOC);
-		$statement->closeCursor();
-		$cms_version = !empty($resultset['value']) ? $resultset['value'] : null;
-		if ($cms_version < 2 and !is_null($cms_version)) {
-			$this->logSection('core', 'First upgrade twBasicCmsPlugin!', null, 'INFO');
-			exit;
-		}
-
-		$query = 'SELECT value FROM %s WHERE %s = :name';
-		$query = sprintf($query, twVersionPeer::TABLE_NAME, twVersionPeer::NAME);
-		$statement = $connection->prepare($query);
-		$statement->bindValue(':name', 'db.core.newsletter', PDO::PARAM_STR);
-		$statement->execute();
-		$resultset = $statement->fetch(PDO::FETCH_ASSOC);
-		$statement->closeCursor();
-		$newsletter_version = !empty($resultset['value']) ? $resultset['value'] : null;
-
-		// TODO: transakcje chyba nie działają sprawdzić
-		$connection->beginTransaction();
-
-		// Modify sf_guard_user_profile to use twAsset
-		$query = 'ALTER TABLE `sf_guard_user_profile` DROP `photo` ';
-		$statement = $connection->prepare($query);
-		$statement->execute();
-		$query = 'ALTER TABLE `sf_guard_user_profile` ADD `asset_id` INT NULL DEFAULT NULL AFTER `user_id`';
-		$statement = $connection->prepare($query);
-		$statement->execute();
-		$query = 'ALTER TABLE `sf_guard_user_profile` ADD CONSTRAINT `sf_guard_user_profile_FK_2` FOREIGN KEY (`asset_id`) REFERENCES `tw_asset` (`id`) ON DELETE SET NULL;';
-		$statement = $connection->prepare($query);
-		$statement->execute();
-
-		// Modify position system
-		$query = 'SELECT MIN(pos) AS min FROM `tw_plugin`';
-		$statement = $connection->prepare($query);
-		$statement->execute();
-		$tw_plugin_array = $statement->fetch();
-		$statement->closeCursor();
-		if ($tw_plugin_array['min'] == 0) {
-			$query = 'UPDATE `tw_plugin` SET pos = pos + 1';
-			$statement = $connection->prepare($query);
-			$statement->execute();
-		}
-
-		// Delete obsolete section
-		$c = new Criteria();
-		$c->add(twPluginPeer::CODE, 'core.basic.webgen');
-		$plugin = twPluginPeer::doSelectOne($c);
-		if ($plugin instanceof twPlugin) {
-			$plugin->delete($connection);
-		}
-
-		// Modify position system
-		$query = 'SELECT id FROM `tw_plugin`';
-		$statement = $connection->prepare($query);
-		$statement->execute();
-		$plugins = $statement->fetchAll();
-		foreach ($plugins as $plugin) {
-			$query = 'SELECT MIN(pos) AS min FROM `tw_plugin_module` WHERE plugin_id = :plugin_id';
-			$statement = $connection->prepare($query);
-			$statement->bindValue(':plugin_id', $plugin['id'], PDO::PARAM_INT);
-			$statement->execute();
-			$tw_plugin_module_array = $statement->fetch();
-			$statement->closeCursor();
-			if ($tw_plugin_module_array['min'] == 0) {
-				$query = 'UPDATE `tw_plugin_module` SET pos = pos + 1 WHERE plugin_id = :plugin_id';
-				$statement = $connection->prepare($query);
-				$statement->bindValue(':plugin_id', $plugin['id'], PDO::PARAM_INT);
-				$statement->execute();
-			}
-		}
-
-		$query = 'ALTER TABLE `tw_plugin_module` CHANGE `code` `code` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ';
-		$statement = $connection->prepare($query);
-		$statement->execute();
-
-		$criteria = new Criteria();
-		$criteria->add(twPluginStatusPeer::CODE, 'activated');
-		$status = twPluginStatusPeer::doSelectOne($criteria, $connection);
-
-		$criteria = new Criteria();
-		$criteria->add(twPluginPeer::CODE, 'core.admin');
-		$plugin = twPluginPeer::doSelectOne($criteria, $connection);
-
-		$plugin_module = new twPluginModule();
-		$plugin_module->settwPluginStatus($status);
-		$plugin_module->setPluginId($plugin->getId());
-		$plugin_module->setCode('core.media.plugins');
-		$plugin_module->setCredentials('admin');
-		$plugin_module->setRoute('@tw_media');
-
-		$plugin_module_i18n_en = new twPluginModuleI18n();
-		$plugin_module_i18n_en->settwPluginModule($plugin_module);
-		$plugin_module_i18n_en->setCulture('en');
-		$plugin_module_i18n_en->setName('Media');
-
-		$plugin_module_i18n_pl = new twPluginModuleI18n();
-		$plugin_module_i18n_pl->settwPluginModule($plugin_module);
-		$plugin_module_i18n_pl->setCulture('pl');
-		$plugin_module_i18n_pl->setName('Pliki');
-
-		$plugin_module->save($connection);
-
-		$query = "UPDATE tw_plugin_module SET code = 'core.user.sfpermission' WHERE route = '@sf_guard_permission'";
-		$statement = $connection->prepare($query);
-		$statement->execute();
-
-		$query = "UPDATE tw_plugin_module SET code = 'core.basic.cms.content' WHERE route = '@tw_basic_cms_content'";
-		$statement = $connection->prepare($query);
-		$statement->execute();
-
-		$query = "UPDATE tw_plugin_module SET code = 'core.basic.cms.partial' WHERE route = '@tw_basic_cms_partial'";
-		$statement = $connection->prepare($query);
-		$statement->execute();
-
-
-		if ($cms_version == 2) {
-			$criteria = new Criteria();
-			$criteria->add(twPluginPeer::CODE, 'core.basic.cms');
-			$plugin = twPluginPeer::doSelectOne($criteria, $connection);
-
-			$plugin_module = new twPluginModule();
-			$plugin_module->settwPluginStatus($status);
-			$plugin_module->setPluginId($plugin->getId());
-			$plugin_module->setCode('core.basic.cms.template');
-			$plugin_module->setCredentials('webdeveloper');
-			$plugin_module->setRoute('@tw_basic_cms_template');
-
-			$plugin_module_i18n_en = new twPluginModuleI18n();
-			$plugin_module_i18n_en->settwPluginModule($plugin_module);
-			$plugin_module_i18n_en->setCulture('en');
-			$plugin_module_i18n_en->setName('Templates');
-
-			$plugin_module_i18n_pl = new twPluginModuleI18n();
-			$plugin_module_i18n_pl->settwPluginModule($plugin_module);
-			$plugin_module_i18n_pl->setCulture('pl');
-			$plugin_module_i18n_pl->setName('Szablony');
-
-			$plugin_module->save($connection);
-			$plugin_module->moveUp();
-
-			$plugin_module = new twPluginModule();
-			$plugin_module->settwPluginStatus($status);
-			$plugin_module->setPluginId($plugin->getId());
-			$plugin_module->setCode('core.basic.cms.settings');
-			$plugin_module->setCredentials('admin');
-			$plugin_module->setRoute('@tw_settings');
-
-			$plugin_module_i18n_en = new twPluginModuleI18n();
-			$plugin_module_i18n_en->settwPluginModule($plugin_module);
-			$plugin_module_i18n_en->setCulture('en');
-			$plugin_module_i18n_en->setName('Settings');
-
-			$plugin_module_i18n_pl = new twPluginModuleI18n();
-			$plugin_module_i18n_pl->settwPluginModule($plugin_module);
-			$plugin_module_i18n_pl->setCulture('pl');
-			$plugin_module_i18n_pl->setName('Ustawienia');
-
-			$plugin_module->save($connection);
-		}
-
-		if ($newsletter_version == 1) {
-			$criteria = new Criteria();
-			$criteria->add(twPluginPeer::CODE, 'core.news');
-			$plugin = twPluginPeer::doSelectOne($criteria, $connection);
-
-			$plugin_module = new twPluginModule();
-			$plugin_module->settwPluginStatus($status);
-			$plugin_module->setPluginId($plugin->getId());
-			$plugin_module->setCode('core.news.settings');
-			$plugin_module->setCredentials('admin');
-			$plugin_module->setRoute('@tw_settings');
-
-			$plugin_module_i18n_en = new twPluginModuleI18n();
-			$plugin_module_i18n_en->settwPluginModule($plugin_module);
-			$plugin_module_i18n_en->setCulture('en');
-			$plugin_module_i18n_en->setName('Settings');
-
-			$plugin_module_i18n_pl = new twPluginModuleI18n();
-			$plugin_module_i18n_pl->settwPluginModule($plugin_module);
-			$plugin_module_i18n_pl->setCulture('pl');
-			$plugin_module_i18n_pl->setName('Ustawienia');
-
-			$plugin_module->save($connection);
-		}
-
-		$connection->commit();
-		return 3;
+		return true;
 	}
 	
-	protected function upgradeVersion3($connection) {
-		$connection->beginTransaction();
+	protected function upgradeVersion4(PropelPDO $connection) {
+		$connection->exec('SET FOREIGN_KEY_CHECKS = 0;');
 		
-		$query = 'ALTER TABLE `tw_plugin` DROP `pos`';
-		$statement = $connection->prepare($query);
-		$statement->execute();
-		
-		$query = 'DROP TABLE IF EXISTS `tw_plugin_module_i18n`';
-		$statement = $connection->prepare($query);
-		$statement->execute();
-		
-		$query = 'DROP TABLE IF EXISTS `tw_plugin_module`';
-		$statement = $connection->prepare($query);
-		$statement->execute();
+		$connection->exec('ALTER TABLE `tw_routing` DROP FOREIGN KEY `tw_routing_FK_1` ;');
 
-		$query = 'DROP TABLE IF EXISTS `sf_guard_user_profile`';
-		$statement = $connection->prepare($query);
-		$statement->execute();
+		$connection->exec('ALTER TABLE `tw_routing` DROP INDEX `tw_routing_FI_1`');
 		
-		$query = '
-CREATE TABLE IF NOT EXISTS `tw_routing`
-(
-	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`plugin_id` INTEGER  NOT NULL,
-	`pos` INTEGER  NOT NULL,
-	`route` VARCHAR(250)  NOT NULL,
-	`url` VARCHAR(250)  NOT NULL,
-	`type` INTEGER  NOT NULL,
-	`name` VARCHAR(250)  NOT NULL,
-	`instructions` TEXT,
-	PRIMARY KEY (`id`),
-	UNIQUE KEY `url` (`url`),
-	KEY `pos`(`pos`),
-	INDEX `tw_routing_FI_1` (`plugin_id`),
-	CONSTRAINT `tw_routing_FK_1`
-		FOREIGN KEY (`plugin_id`)
-		REFERENCES `tw_plugin` (`id`)
-) ENGINE=InnoDB;
-		';
-		$statement = $connection->prepare($query);
-		$statement->execute();
+		$connection->exec('ALTER TABLE `tw_routing` DROP `plugin_id`');
 		
-		$connection->commit();
+		$connection->exec('
+			ALTER TABLE `tw_routing` ADD `module` VARCHAR( 250 ) NOT NULL AFTER `name` ,
+			ADD INDEX ( `module` )
+		');
 		
-		return 4;
+		$connection->exec('DROP TABLE IF EXISTS `tw_plugin_i18n`;');
+		
+		$connection->exec('DROP TABLE IF EXISTS `tw_plugin`;');
+		
+		$connection->exec('DROP TABLE IF EXISTS `tw_plugin_status_i18n`;');
+		
+		$connection->exec('DROP TABLE IF EXISTS `tw_plugin_status`;');
+		
+		$connection->exec('DROP TABLE IF EXISTS `tw_language`;');
+		
+		$connection->exec('SET FOREIGN_KEY_CHECKS = 1;');
+		return 5;
+	}
+	
+	protected function installPlugin(PropelPDO $connection) {
+		$connection->exec('SET FOREIGN_KEY_CHECKS = 0;');
+		
+		$connection->exec('DROP TABLE IF EXISTS `tw_routing`;');
+		
+		$connection->exec('
+			CREATE TABLE `tw_routing`
+			(
+				`id` INTEGER  NOT NULL AUTO_INCREMENT,
+				`pos` INTEGER  NOT NULL,
+				`route` VARCHAR(250)  NOT NULL,
+				`url` VARCHAR(250)  NOT NULL,
+				`type` INTEGER  NOT NULL,
+				`name` VARCHAR(250)  NOT NULL,
+				`module` VARCHAR(250)  NOT NULL,
+				`instructions` TEXT,
+				PRIMARY KEY (`id`),
+				UNIQUE KEY `url` (`url`),
+				KEY `pos`(`pos`),
+				KEY `module`(`module`)
+			) ENGINE=InnoDB;
+		');
+		
+		$connection->exec('DROP TABLE IF EXISTS `tw_settings`;');
+		
+		$connection->exec('
+			CREATE TABLE `tw_settings`
+			(
+				`name` VARCHAR(250)  NOT NULL,
+				`value` TEXT,
+				`id` INTEGER  NOT NULL AUTO_INCREMENT,
+				PRIMARY KEY (`id`),
+				UNIQUE KEY `uname` (`name`)
+			) ENGINE=InnoDB;
+		');
+		
+		$connection->exec('DROP TABLE IF EXISTS `tw_version`;');
+		
+		$connection->exec('
+			CREATE TABLE `tw_version`
+			(
+				`id` INTEGER  NOT NULL AUTO_INCREMENT,
+				`name` VARCHAR(20)  NOT NULL,
+				`value` TEXT  NOT NULL,
+				PRIMARY KEY (`id`),
+				UNIQUE KEY `code` (`name`)
+			) ENGINE=InnoDB;
+		');
+		
+		$connection->exec('DROP TABLE IF EXISTS `tw_user`;');
+		
+		$connection->exec('
+			CREATE TABLE `tw_user`
+			(
+				`id` INTEGER  NOT NULL AUTO_INCREMENT,
+				`username` VARCHAR(128)  NOT NULL,
+				`algorithm` VARCHAR(128) default \'sha1\' NOT NULL,
+				`salt` VARCHAR(128)  NOT NULL,
+				`password` VARCHAR(128)  NOT NULL,
+				`created_at` DATETIME,
+				`last_login` DATETIME,
+				`is_active` TINYINT default 1 NOT NULL,
+				PRIMARY KEY (`id`),
+				UNIQUE KEY `tw_user_U_1` (`username`)
+			) ENGINE=InnoDB;
+		');
+		
+		$connection->exec('SET FOREIGN_KEY_CHECKS = 1;');
+		
+		$this->setActualVersion($connection);
+	}
+	
+	protected function setActualVersion(PropelPDO $connection) {
+		$tw_version = new twVersion();
+		$tw_version->setName('db.core.base');
+		$tw_version->setValue(self::VERSION);
+		$tw_version->save($connection);
+		
+		return self::VERSION;
 	}
 }

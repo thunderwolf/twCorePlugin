@@ -22,5 +22,3 @@ class twCoreLanguageFilter extends sfFilter {
 		$filterChain->execute();
 	}
 }
-
-?>

@@ -9,10 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Tales.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/TalesInternal.php';
 
 /**
  * You can implement this interface to create custom tales modifiers
@@ -26,19 +26,19 @@ interface PHPTAL_Tales
 {
 }
 
- 
- /**
-  * translates TALES expression with alternatives into single PHP expression.
-  * Identical to phptal_tales() for singular expressions.
-  *
-  * Please use this function rather than PHPTAL_Php_TalesInternal methods.
-  *
-  * @see PHPTAL_Php_TalesInternal::compileToPHPStatements()
-  * @return string
+
+/**
+ * translates TALES expression with alternatives into single PHP expression.
+ * Identical to phptal_tales() for singular expressions.
+ *
+ * Please use this function rather than PHPTAL_Php_TalesInternal methods.
+ *
+ * @see PHPTAL_Php_TalesInternal::compileToPHPExpressions()
+ * @return string
  */
 function phptal_tale($expression, $nothrow=false)
 {
-    return PHPTAL_Php_TalesInternal::compileToPHPExpression($expression,$nothrow);
+    return PHPTAL_Php_TalesInternal::compileToPHPExpression($expression, $nothrow);
 }
 
 /**
@@ -53,6 +53,6 @@ function phptal_tale($expression, $nothrow=false)
  */
 function phptal_tales($expression, $nothrow=false)
 {
-    return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression,$nothrow);
+    return PHPTAL_Php_TalesInternal::compileToPHPExpressions($expression, $nothrow);
 }
 

@@ -9,15 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Defs.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Namespace.php';
-require_once 'PHPTAL/Namespace/Builtin.php';
-require_once 'PHPTAL/Namespace/TAL.php';
-require_once 'PHPTAL/Namespace/METAL.php';
-require_once 'PHPTAL/Namespace/I18N.php';
-require_once 'PHPTAL/Namespace/PHPTAL.php';
 
 /**
  * PHPTAL constants.
@@ -44,7 +39,7 @@ class PHPTAL_Dom_Defs
         }
         return self::$_instance;
     }
-    
+
     protected function __construct()
     {
         $this->registerNamespace(new PHPTAL_Namespace_TAL());
@@ -58,6 +53,7 @@ class PHPTAL_Dom_Defs
      * it will assume elements with no namespace may be XHTML too.
      *
      * @param string $tagName local name of the tag
+     *
      * @return bool
      */
     public function isEmptyTagNS($namespace_uri, $local_name)
@@ -87,6 +83,7 @@ class PHPTAL_Dom_Defs
      * Returns true if the attribute is an xhtml boolean attribute.
      *
      * @param string $att local name
+     *
      * @return bool
      */
     public function isBooleanAttribute($att)
@@ -155,9 +152,9 @@ class PHPTAL_Dom_Defs
      */
     public function registerNamespace(PHPTAL_Namespace $ns)
     {
-        $prefix = strtolower($ns->getPrefix());
         $this->namespaces_by_uri[$ns->getNamespaceURI()] = $ns;
         $this->prefix_to_uri[$ns->getPrefix()] = $ns->getNamespaceURI();
+        $prefix = strtolower($ns->getPrefix());
         foreach ($ns->getAttributes() as $name => $attribute) {
             $key = $prefix.':'.strtolower($name);
             $this->_dictionary[$key] = $attribute;
@@ -166,8 +163,14 @@ class PHPTAL_Dom_Defs
 
     private static $_instance = null;
     private $_dictionary = array();
+    /**
+     * list of PHPTAL_Namespace objects
+     */
     private $namespaces_by_uri = array();
-    private $prefix_to_uri = array();
+    private $prefix_to_uri = array(
+        'xml'=>'http://www.w3.org/XML/1998/namespace',
+        'xmlns'=>'http://www.w3.org/2000/xmlns/',
+    );
 
     /**
      * This array contains XHTML tags that must be echoed in a &lt;tag/&gt; form

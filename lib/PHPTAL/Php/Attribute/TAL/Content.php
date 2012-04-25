@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Content.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -59,10 +60,10 @@ implements PHPTAL_Php_TalesChainReader
 
     private function generateDefault(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->phpelement->generateContent($codewriter,true);
+        $this->phpelement->generateContent($codewriter, true);
     }
 
-    private function generateChainedContent(PHPTAL_Php_CodeWriter $codewriter, $code)
+    protected function generateChainedContent(PHPTAL_Php_CodeWriter $codewriter, $code)
     {
         $executor = new PHPTAL_Php_TalesChainExecutor($codewriter, $code, $this);
     }

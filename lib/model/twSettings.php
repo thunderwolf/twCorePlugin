@@ -1,5 +1,5 @@
 <?php
 
-class twSettings extends PlugintwSettings
+class twSettings extends BasetwSettings
 {
 }

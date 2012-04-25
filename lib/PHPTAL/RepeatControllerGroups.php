@@ -10,6 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @author   Iván Montes <drslump@pollinimini.net>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: RepeatControllerGroups.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -47,6 +48,7 @@ class PHPTAL_RepeatControllerGroups
      * Checks if the data passed is the first one in a group
      *
      * @param mixed $data   The data to evaluate
+     *
      * @return Mixed    True if the first item in the group, false if not and
      *                  this same object if the path is not finished
      */
@@ -81,6 +83,7 @@ class PHPTAL_RepeatControllerGroups
      * Checks if the data passed is the last one in a group
      *
      * @param mixed $data   The data to evaluate
+     *
      * @return Mixed    True if the last item in the group, false if not and
      *                  this same object if the path is not finished
      */
@@ -118,6 +121,7 @@ class PHPTAL_RepeatControllerGroups
      * Handles variable accesses for the tal path resolver
      *
      * @param string $var   The variable name to check
+     *
      * @return Mixed    An object/array if the path is not over or a boolean
      *
      * @todo    replace the PHPTAL_Context::path() with custom code

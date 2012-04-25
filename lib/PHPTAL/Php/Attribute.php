@@ -9,9 +9,9 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Attribute.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
-require_once 'PHPTAL/Php/TalesChainExecutor.php';
 
 /**
  * Base class for all PHPTAL attributes.
@@ -37,18 +37,18 @@ abstract class PHPTAL_Php_Attribute
     protected $phpelement;
 
     /**
-      * Called before element printing.
-      * Default implementation is for backwards compatibility only. Please always override both before() and after().
-      */
+     * Called before element printing.
+     * Default implementation is for backwards compatibility only. Please always override both before() and after().
+     */
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $this->tag = $this->phpelement; $this->phpelement->generator = $codewriter; $this->start(); // FIXME: remove
     }
 
     /**
-      * Called after element printing.
-      * Default implementation is for backwards compatibility only. Please always override both before() and after().
-      */
+     * Called after element printing.
+     * Default implementation is for backwards compatibility only. Please always override both before() and after().
+     */
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $this->tag = $this->phpelement; $this->phpelement->generator = $codewriter; $this->end(); // FIXME: remove

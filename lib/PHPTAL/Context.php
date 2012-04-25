@@ -9,8 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Context.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
+
 /**
  * This class handles template execution context.
  * Holds template variables and carries state/scope across macro executions.
@@ -18,8 +20,6 @@
  */
 class PHPTAL_Context
 {
-    public $_line = false;
-    public $_file = false;
     public $repeat;
     public $_xmlDeclaration;
     public $_docType;
@@ -28,15 +28,16 @@ class PHPTAL_Context
     private $_slotsStack = array();
     private $_parentContext = null;
     private $_globalContext = null;
+    private $_echoDeclarations = false;
 
     public function __construct()
     {
-        $this->repeat = new StdClass();
+        $this->repeat = new stdClass();
     }
 
     public function __clone()
     {
-        $this->repeat = clone($this->repeat);
+        $this->repeat = clone $this->repeat;
     }
 
     /**
@@ -50,12 +51,12 @@ class PHPTAL_Context
     }
 
     /**
-     * set StdClass object which has property of every global variable
+     * set stdClass object which has property of every global variable
      * It can use __isset() and __get() [none of them or both]
      *
      * @return void
      */
-    public function setGlobal(StdClass $globalContext)
+    public function setGlobal(stdClass $globalContext)
     {
         $this->_globalContext = $globalContext;
     }
@@ -83,22 +84,35 @@ class PHPTAL_Context
     }
 
     /**
+     * @param bool $tf true if DOCTYPE and XML declaration should be echoed immediately, false if buffered
+     */
+    public function echoDeclarations($tf)
+    {
+        $this->_echoDeclarations = $tf;
+    }
+
+    /**
      * Set output document type if not already set.
      *
      * This method ensure PHPTAL uses the first DOCTYPE encountered (main
      * template or any macro template source containing a DOCTYPE.
      *
+     * @param bool $called_from_macro will do nothing if _echoDeclarations is also set
+     *
      * @return void
      */
-    public function setDocType($doctype)
+    public function setDocType($doctype,$called_from_macro)
     {
         if ($this->_parentContext) {
-            return $this->_parentContext->setDocType($doctype);
+            $this->_parentContext->setDocType($doctype, $called_from_macro);
+        } else if ($this->_echoDeclarations) {
+            if (!$called_from_macro) {
+                echo $doctype;
+            } else {
+                throw new PHPTAL_ConfigurationException("Executed macro in file with DOCTYPE when using echoExecute(). This is not supported yet. Remove DOCTYPE or use PHPTAL->execute().");
+            }
         }
-        if ($this->_parentContext) {
-            return $this->_parentContext->setDocType($doctype);
-        }
-        if (!$this->_docType) {
+        else if (!$this->_docType) {
             $this->_docType = $doctype;
         }
     }
@@ -110,17 +124,21 @@ class PHPTAL_Context
      * (main template or any macro template source containing an xml
      * declaration)
      *
+     * @param bool $called_from_macro will do nothing if _echoDeclarations is also set
+     *
      * @return void
      */
-    public function setXmlDeclaration($xmldec)
+    public function setXmlDeclaration($xmldec, $called_from_macro)
     {
         if ($this->_parentContext) {
-            return $this->_parentContext->setXmlDeclaration($xmldec);
-        }
-        if ($this->_parentContext) {
-            return $this->_parentContext->setXmlDeclaration($xmldec);
-        }
-        if (!$this->_xmlDeclaration) {
+            $this->_parentContext->setXmlDeclaration($xmldec, $called_from_macro);
+        } else if ($this->_echoDeclarations) {
+            if (!$called_from_macro) {
+                echo $xmldec."\n";
+            } else {
+                throw new PHPTAL_ConfigurationException("Executed macro in file with XML declaration when using echoExecute(). This is not supported yet. Remove XML declaration or use PHPTAL->execute().");
+            }
+        } else if (!$this->_xmlDeclaration) {
             $this->_xmlDeclaration = $xmldec;
         }
     }
@@ -143,23 +161,48 @@ class PHPTAL_Context
      */
     public function hasSlot($key)
     {
-        if ($this->_parentContext) {
-            return $this->_parentContext->hasSlot($key); // setting slots in any context
-        }
-        return array_key_exists($key, $this->_slots);
+        return isset($this->_slots[$key]) || ($this->_parentContext && $this->_parentContext->hasSlot($key));
     }
 
     /**
      * Returns the content of specified filled slot.
      *
+     * Use echoSlot() whenever you just want to output the slot
+     *
      * @return string
      */
     public function getSlot($key)
     {
-        if ($this->_parentContext) {
-            return $this->_parentContext->getSlot($key); // setting slots in any context
+        if (isset($this->_slots[$key])) {
+            if (is_string($this->_slots[$key])) {
+                return $this->_slots[$key];
+            }
+            ob_start();
+            call_user_func($this->_slots[$key][0], $this->_slots[$key][1], $this->_slots[$key][2]);
+            return ob_get_clean();
+        } else if ($this->_parentContext) {
+            return $this->_parentContext->getSlot($key);
         }
-        return $this->_slots[$key];
+    }
+
+    /**
+     * Immediately echoes content of specified filled slot.
+     *
+     * Equivalent of echo $this->getSlot();
+     *
+     * @return string
+     */
+    public function echoSlot($key)
+    {
+        if (isset($this->_slots[$key])) {
+            if (is_string($this->_slots[$key])) {
+                echo $this->_slots[$key];
+            } else {
+                call_user_func($this->_slots[$key][0], $this->_slots[$key][1], $this->_slots[$key][2]);
+            }
+        } else if ($this->_parentContext) {
+            return $this->_parentContext->echoSlot($key);
+        }
     }
 
     /**
@@ -169,10 +212,20 @@ class PHPTAL_Context
      */
     public function fillSlot($key, $content)
     {
+        $this->_slots[$key] = $content;
         if ($this->_parentContext) {
-            $this->_parentContext->fillSlot($key, $content); // setting slots in any context
+            // setting slots in any context (probably violates TAL, but works around bug with tal:define popping context after fillslot)
+            $this->_parentContext->fillSlot($key, $content);
         }
-        else $this->_slots[$key] = $content;
+    }
+
+    public function fillSlotCallback($key, $callback, $_thistpl, $tpl)
+    {
+        assert('is_callable($callback)');
+        $this->_slots[$key] = array($callback, $_thistpl, $tpl);
+        if ($this->_parentContext) {
+            $this->_parentContext->fillSlotCallback($key,  $callback, $_thistpl, $tpl);
+        }
     }
 
     /**
@@ -226,9 +279,7 @@ class PHPTAL_Context
      */
     public function __get($varname)
     {
-        if (property_exists($this, $varname)) { // must use property_exists to avoid calling own __isset().
-            return $this->$varname;            // edge case with NULL will be weird
-        }
+        // PHP checks public properties first, there's no need to support them here
 
         // must use isset() to allow custom global contexts with __isset()/__get()
         if (isset($this->_globalContext->$varname)) {
@@ -243,9 +294,9 @@ class PHPTAL_Context
             return null;
         }
 
-        throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope", $this->_file, $this->_line);
+        throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope");
     }
-    
+
     /**
      * helper method for PHPTAL_Context::path()
      *
@@ -272,7 +323,7 @@ class PHPTAL_Context
         }
         throw new PHPTAL_VariableNotFoundException(trim("Attempt to read property '$current'$pathinfo from ".gettype($base)." value {$basename}"));
     }
-    
+
     /**
      * Resolve TALES path starting from the first path element.
      * The TALES path : object/method1/10/method2
@@ -301,13 +352,13 @@ class PHPTAL_Context
         foreach (explode('/', $path) as $current) {
             // object handling
             if (is_object($base)) {
-                // look for method
-                if (method_exists($base, $current)) {
+                // look for method. Both method_exists and is_callable are required because of __call() and protected methods
+                if (method_exists($base, $current) && is_callable(array($base, $current))) {
                     $base = $base->$current();
                     continue;
                 }
 
-                // look for variable
+                // look for property
                 if (property_exists($base, $current)) {
                     $base = $base->$current;
                     continue;
@@ -318,20 +369,20 @@ class PHPTAL_Context
                     continue;
                 }
 
-                if ($base instanceof Countable && ($current === 'length' || $current === 'size')) {
+                if (($current === 'length' || $current === 'size') && $base instanceof Countable) {
                     $base = count($base);
                     continue;
                 }
 
                 // look for isset (priority over __get)
-                if (method_exists($base, '__isset') && is_callable(array($base, '__isset'))) {
+                if (method_exists($base, '__isset')) {
                     if ($base->__isset($current)) {
                         $base = $base->$current;
                         continue;
                     }
                 }
                 // ask __get and discard if it returns null
-                elseif (method_exists($base, '__get') && is_callable(array($base, '__get'))) {
+                elseif (method_exists($base, '__get')) {
                     $tmp = $base->$current;
                     if (null !== $tmp) {
                         $base = $tmp;
@@ -346,7 +397,7 @@ class PHPTAL_Context
                         $base = $base->__call($current, array());
                         continue;
                     }
-                    catch(BadMethodCallException $e){}
+                    catch(BadMethodCallException $e) {}
                 }
 
                 if ($nothrow) {

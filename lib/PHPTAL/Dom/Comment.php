@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Comment.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 
@@ -20,8 +21,8 @@ class PHPTAL_Dom_Comment extends PHPTAL_Dom_Node
 {
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
-        if (!preg_match('/^<!--\s*!/', $this->getValueEscaped())) {
-            $codewriter->pushHTML($this->getValueEscaped());
+        if (!preg_match('/^\s*!/', $this->getValueEscaped())) {
+            $codewriter->pushHTML('<!--'.$this->getValueEscaped().'-->');
         }
     }
 }

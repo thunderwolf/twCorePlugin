@@ -1,5 +1,5 @@
 <?php
 
-class twSettingsPeer extends PlugintwSettingsPeer
+class twSettingsPeer extends BasetwSettingsPeer
 {
 }

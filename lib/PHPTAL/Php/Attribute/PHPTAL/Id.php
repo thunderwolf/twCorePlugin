@@ -9,6 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Id.php 3526 2012-04-25 23:22:59Z ldath $
  * @link     http://phptal.org/
  */
 /**
@@ -38,14 +39,14 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         // end of if PROCEED
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
 
         // if trigger found, notify the end of the node
         $codewriter->doIf($this->var);
         $codewriter->pushCode(
             $this->var.'->end('.$codewriter->str($this->expression).', $tpl)'
         );
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
         $codewriter->recycleTempVariable($this->var);
     }
 }
