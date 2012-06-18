@@ -1,38 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database name="propel" package="plugins.twCorePlugin.lib.model" defaultIdMethod="native">
 
-  <table name="tw_routing" phpName="twRouting">
-    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-    <column name="pos" type="INTEGER" required="true" />
-    <column name="route" type="VARCHAR" size="250" required="true" />
-    <column name="url" type="VARCHAR" size="250" required="true" />
-    <column name="type" type="INTEGER" required="true" />
-    <column name="name" type="VARCHAR" size="250" required="true" />
-    <column name="module" type="VARCHAR" size="250" required="true" />
-    <column name="instructions" type="LONGVARCHAR" />
-    <index name="pos">
-      <index-column name="pos" />
-    </index>
-    <index name="module">
-      <index-column name="module" />
-    </index>
-    <unique name="url">
-      <unique-column name="url" />
-    </unique>
-    <behavior name="sortable">
-      <parameter name="rank_column" value="pos" />
-    </behavior>
-  </table>
-
-  <table name="tw_settings" phpName="twSettings">
-    <column name="name" type="VARCHAR" size="250" required="true" />
-    <column name="value" type="LONGVARCHAR" required="false" />
-    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-    <unique name="uname">
-      <unique-column name="name" />
-    </unique>
-  </table>
-
   <table name="tw_version" phpName="twVersion">
     <column name="id" type="integer" required="true" primaryKey="true" autoincrement="true" />
     <column name="name" type="VARCHAR" size="20" required="true" />
@@ -40,20 +8,6 @@
     <unique name="code">
       <unique-column name="name" />
     </unique>
-  </table>
-  
-  <table name="tw_user" phpName="twUser">
-    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-    <column name="username" type="varchar" size="128" required="true" />
-    <unique>
-      <unique-column name="username" />
-    </unique>
-    <column name="algorithm" type="varchar" size="128" required="true" default="sha1" />
-    <column name="salt" type="varchar" size="128" required="true" />
-    <column name="password" type="varchar" size="128" required="true" />
-    <column name="created_at" type="timestamp" />
-    <column name="last_login" type="timestamp" />
-    <column name="is_active" type="boolean" required="true" default="1" />
   </table>
 
 </database>

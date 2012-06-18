@@ -75,6 +75,10 @@ EOF;
 			ALTER TABLE `tw_routing` ADD `module` VARCHAR( 250 ) NOT NULL AFTER `name` ,
 			ADD INDEX ( `module` )
 		');
+		$tw_version = new twVersion();
+		$tw_version->setName('db.core.routing');
+		$tw_version->setValue(1);
+		$tw_version->save($connection);
 		
 		$connection->exec('DROP TABLE IF EXISTS `tw_plugin_i18n`;');
 		
@@ -86,45 +90,14 @@ EOF;
 		
 		$connection->exec('DROP TABLE IF EXISTS `tw_language`;');
 		
+		$connection->exec('DROP TABLE IF EXISTS `tw_settings`;');
+		
 		$connection->exec('SET FOREIGN_KEY_CHECKS = 1;');
 		return 5;
 	}
 	
 	protected function installPlugin(PropelPDO $connection) {
 		$connection->exec('SET FOREIGN_KEY_CHECKS = 0;');
-		
-		$connection->exec('DROP TABLE IF EXISTS `tw_routing`;');
-		
-		$connection->exec('
-			CREATE TABLE `tw_routing`
-			(
-				`id` INTEGER  NOT NULL AUTO_INCREMENT,
-				`pos` INTEGER  NOT NULL,
-				`route` VARCHAR(250)  NOT NULL,
-				`url` VARCHAR(250)  NOT NULL,
-				`type` INTEGER  NOT NULL,
-				`name` VARCHAR(250)  NOT NULL,
-				`module` VARCHAR(250)  NOT NULL,
-				`instructions` TEXT,
-				PRIMARY KEY (`id`),
-				UNIQUE KEY `url` (`url`),
-				KEY `pos`(`pos`),
-				KEY `module`(`module`)
-			) ENGINE=InnoDB;
-		');
-		
-		$connection->exec('DROP TABLE IF EXISTS `tw_settings`;');
-		
-		$connection->exec('
-			CREATE TABLE `tw_settings`
-			(
-				`name` VARCHAR(250)  NOT NULL,
-				`value` TEXT,
-				`id` INTEGER  NOT NULL AUTO_INCREMENT,
-				PRIMARY KEY (`id`),
-				UNIQUE KEY `uname` (`name`)
-			) ENGINE=InnoDB;
-		');
 		
 		$connection->exec('DROP TABLE IF EXISTS `tw_version`;');
 		
@@ -136,24 +109,6 @@ EOF;
 				`value` TEXT  NOT NULL,
 				PRIMARY KEY (`id`),
 				UNIQUE KEY `code` (`name`)
-			) ENGINE=InnoDB;
-		');
-		
-		$connection->exec('DROP TABLE IF EXISTS `tw_user`;');
-		
-		$connection->exec('
-			CREATE TABLE `tw_user`
-			(
-				`id` INTEGER  NOT NULL AUTO_INCREMENT,
-				`username` VARCHAR(128)  NOT NULL,
-				`algorithm` VARCHAR(128) default \'sha1\' NOT NULL,
-				`salt` VARCHAR(128)  NOT NULL,
-				`password` VARCHAR(128)  NOT NULL,
-				`created_at` DATETIME,
-				`last_login` DATETIME,
-				`is_active` TINYINT default 1 NOT NULL,
-				PRIMARY KEY (`id`),
-				UNIQUE KEY `tw_user_U_1` (`username`)
 			) ENGINE=InnoDB;
 		');
 		

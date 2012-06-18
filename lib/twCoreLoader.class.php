@@ -12,9 +12,8 @@ class twCoreLoader
 			);
 			$memcache = new twCoreMemcache($memcache_config);
 			self::loadTwVersionArray($memcache);
-			self::loadTwSettingsArray($memcache);
-			self::loadTwRoutingArray($memcache);
-
+			// TODO: for short time off
+// 			self::loadTwRoutingArray($memcache);
 		} catch (Exception $e) {
 			return $e->getMessage();
 		}
@@ -38,25 +37,6 @@ class twCoreLoader
 			$versions = array();
 		}
 		sfConfig::set('tw_version_array', $versions);
-	}
-
-	static protected function loadTwSettingsArray($memcache) {
-		if ($memcache != false) {
-			$settings_key = sfConfig::get('tw_memcache_kp').'.core.settings';
-			$settings = $memcache->get($settings_key);
-			if (empty($settings)) {
-				$settings = self::loadTwSettingsArrayFromDB();
-				if (!empty($settings)) {
-					$memcache->set($settings_key, $settings);
-				}
-			}
-		} else {
-			$settings = self::loadTwSettingsArrayFromDB();
-		}
-		if (!is_array($settings)) {
-			$settings = array();
-		}
-		sfConfig::set('tw_settings_array', $settings);
 	}
 
 	static protected function loadTwRoutingArray($memcache) {
@@ -83,21 +63,6 @@ class twCoreLoader
 			self::createConnection();
 		}
 		$sql = 'SELECT * FROM tw_version';
-		$sth = self::$conn->prepare($sql);
-		$sth->execute();
-		$pre = $sth->fetchAll(PDO::FETCH_ASSOC);
-		$out = array();
-		foreach($pre as $row) {
-			$out[$row['name']] = $row['value'];
-		}
-		return $out;
-	}
-
-	static protected function loadTwSettingsArrayFromDB() {
-		if (is_null(self::$conn)) {
-			self::createConnection();
-		}
-		$sql = 'SELECT * FROM tw_settings';
 		$sth = self::$conn->prepare($sql);
 		$sth->execute();
 		$pre = $sth->fetchAll(PDO::FETCH_ASSOC);
