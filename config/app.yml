@@ -1,0 +1,5 @@
+all:
+  tw_core:
+    memcache:
+      active: false
+    version_load: false

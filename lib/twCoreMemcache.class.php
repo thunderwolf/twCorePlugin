@@ -11,7 +11,7 @@ class twCoreMemcache
 			}
 			if ($memcache != false) {
 				$this->memcache = $memcache;
-				$strict_key_prefix = $key_prefix = sfConfig::get('tw_project', 'default') . '.' . sfConfig::get('tw_memcache_flush', 0) . '.' . __FILE__;
+				$strict_key_prefix = $key_prefix = sfConfig::get('tw_project_name', 'default') . '.' . sfConfig::get('tw_project_version', 0) . '.' . __FILE__;
 				sfConfig::set('tw_memcache', $this);
 				sfConfig::set('tw_memcache_skp', $strict_key_prefix);
 				sfConfig::set('tw_memcache_kp', $key_prefix);
