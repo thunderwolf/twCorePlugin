@@ -26,9 +26,13 @@ class twCorePluginConfiguration extends sfPluginConfiguration {
 		if (!sfConfig::get('tw_admin_module_web_dir')) {
 			sfConfig::set('tw_admin_module_web_dir', '/twAdminPlugin');
 		}
-		
+
 		if (sfConfig::get('app_tw_core_version_load', false)) {
-			twVersionLoader::load();
+			try {
+				twVersionLoader::load();
+			} catch (Exception $e) {
+				pass;
+			}
 		}
 	}
 }
