@@ -1,279 +1,299 @@
 <?xml version="1.0" ?>
 <xliff version="1.0">
-  <file orginal="global" source-language="en_US" datatype="plaintext">
-    <body>
-      <trans-unit id="1">
-        <source>create</source>
-        <target>utwórz</target>
-      </trans-unit>
-      <trans-unit id="2">
-        <source>delete</source>
-        <target>usuń</target>
-      </trans-unit>
-      <trans-unit id="3">
-        <source>save</source>
-        <target>zapisz</target>
-      </trans-unit>
-      <trans-unit id="4">
-        <source>save and add</source>
-        <target>zapisz i dodaj następny</target>
-      </trans-unit>
-      <trans-unit id="5">
-        <source>Actions</source>
-        <target>Akcje</target>
-      </trans-unit>
-      <trans-unit id="6">
-        <source>[0] no result|[1] 1 result|(1,+Inf] %1% results</source>
-        <target>[0] brak wyników|[1] 1 wynik|(1,+4] %1% wyniki|(4,+Inf] %1% wyników</target>
-      </trans-unit>
-      <trans-unit id="7">
-        <source>desc</source>
-        <target>malejąco</target>
-      </trans-unit>
-      <trans-unit id="7">
-        <source>asc</source>
-        <target>rosnąco</target>
-      </trans-unit>
-      <trans-unit id="8">
-        <source>Your modifications have been saved</source>
-        <target>Twoja modyfikacja została zapisana</target>
-      </trans-unit>
-      <trans-unit id="9">
-        <source>Are you sure?</source>
-        <target>Czy napewno?</target>
-      </trans-unit>
-      <trans-unit id="10">
-        <source>no result</source>
-        <target>brak wyników</target>
-      </trans-unit>
-      <trans-unit id="11">
-        <source>filters</source>
-        <target>filtry</target>
-      </trans-unit>
-      <trans-unit id="12">
-        <source>filter</source>
-        <target>filtruj</target>
-      </trans-unit>
-      <trans-unit id="13">
-        <source>reset</source>
-        <target>resetuj</target>
-      </trans-unit>
-      <trans-unit id="14">
-        <source>edit</source>
-        <target>edytuj</target>
-      </trans-unit>
-      <trans-unit id="15">
-        <source>list</source>
-        <target>powrót do listy</target>
-      </trans-unit>
-      <trans-unit id="16">
-        <source>Password is mandatory</source>
-        <target>Hasło jest wymagane</target>
-      </trans-unit>
-      <trans-unit id="17">
-        <source>There are some errors that prevent the form to validate</source>
-        <target>Jest kilka błędów uniemożliwiających walidację formularza</target>
-      </trans-unit>
-      <trans-unit id="18">
-        <source>Please, enter a username</source>
-        <target>Proszę, wprowadzić nazwę użytkownika</target>
-      </trans-unit>
-      <trans-unit id="19">
-        <source>Please, enter a firstname</source>
-        <target>Proszę, wprowadzić imię</target>
-      </trans-unit>
-      <trans-unit id="20">
-        <source>Please, enter a lastname</source>
-        <target>Proszę, wprowadzić nazwisko</target>
-      </trans-unit>
-      <trans-unit id="21">
-        <source>Created at:</source>
-        <target>Utworzono:</target>
-      </trans-unit>
-      <trans-unit id="22">
-        <source>Updated at:</source>
-        <target>Zaktualizowano:</target>
-      </trans-unit>
-      <trans-unit id="23">
-        <source>-- please choose from list --</source>
-        <target>-- proszę wybrać z listy --</target>
-      </trans-unit>
-      <trans-unit id="24">
-        <source>The form is not valid because it contains some errors.</source>
-        <target>Formularz nie został wysłany gdyż zawiera błędy.</target>
-      </trans-unit>
-      <trans-unit id="25">
-        <source>This record is not set</source>
-        <target>To pole nie zostało ustawione</target>
-      </trans-unit>
-      <trans-unit id="26">
-        <source>This record can't be empty</source>
-        <target>To pole nie może być pute</target>
-      </trans-unit>
-      <trans-unit id="27">
-        <source>This email address is invalid</source>
-        <target>Wprowadzony adres email jest nieprawidłowy</target>
-      </trans-unit>
-      <trans-unit id="28">
-        <source>- no data -</source>
-        <target>- brak danych -</target>
-      </trans-unit>
-      <trans-unit id="29">
-        <source>Created at</source>
-        <target>Utworzono</target>
-      </trans-unit>
-      <trans-unit id="30">
-        <source>Updated at</source>
-        <target>Zaktualizowano</target>
-      </trans-unit>
-      <trans-unit id="31">
-        <source>Input is too long</source>
-        <target>Wprowadzono za długi tekst</target>
-      </trans-unit>
-      <trans-unit id="32">
-        <source>Uniqueness error</source>
-        <target>Błąd unikalności</target>
-      </trans-unit>
-      <trans-unit id="33">
-        <source>Choose a language</source>
-        <target>Wybierz język</target>
-      </trans-unit>
-      <trans-unit id="34">
-        <source>Polish</source>
-        <target>Polski</target>
-      </trans-unit>
-      <trans-unit id="35">
-        <source>Home</source>
-        <target>Start</target>
-      </trans-unit>
-      <trans-unit id="36">
-        <source>Login</source>
-        <target>Logowanie</target>
-      </trans-unit>
-      <trans-unit id="37">
-        <source>You are in:</source>
-        <target>Jesteś w:</target>
-      </trans-unit>
-      <trans-unit id="38">
-        <source>login</source>
-        <target>zaloguj się</target>
-      </trans-unit>
-      <trans-unit id="39">
-        <source>logout</source>
-        <target>wyloguj się</target>
-      </trans-unit>
-      <trans-unit id="40">
-        <source>Administration</source>
-        <target>Administracja</target>
-      </trans-unit>
-      <trans-unit id="41">
-        <source>Users</source>
-        <target>Użytkownicy</target>
-      </trans-unit>
-      <trans-unit id="42">
-        <source>Permissions</source>
-        <target>Uprawnienia</target>
-      </trans-unit>
-      <trans-unit id="43">
-        <source>Groups</source>
-        <target>Grupy uprawnień</target>
-      </trans-unit>
-      <trans-unit id="44">
-        <source>Informations</source>
-        <target>Informacje</target>
-      </trans-unit>
-      <trans-unit id="45">
-        <source>Choose an action</source>
-        <target>Wybierz akcję</target>
-      </trans-unit>
-      <trans-unit id="46">
-        <source>code</source>
-        <target>kody</target>
-      </trans-unit>
-      <trans-unit id="47">
-        <source>Settings</source>
-        <target>Ustawienia</target>
-      </trans-unit>
-      <trans-unit id="48">
-        <source>New</source>
-        <target>Nowy</target>
-      </trans-unit>
-      <trans-unit id="49">
-        <source>Edit</source>
-        <target>Edytuj</target>
-      </trans-unit>
-      <trans-unit id="50">
-        <source>Delete</source>
-        <target>Usuń</target>
-      </trans-unit>
-      <trans-unit id="51">
-        <source>Title</source>
-        <target>Tytuł</target>
-      </trans-unit>
-      <trans-unit id="52">
-        <source>Active</source>
-        <target>Aktywny</target>
-      </trans-unit>
-      <trans-unit id="53">
-        <source>Author</source>
-        <target>Autor</target>
-      </trans-unit>
-      <trans-unit id="54">
-        <source>Thumb</source>
-        <target>Miniatura</target>
-      </trans-unit>
-      <trans-unit id="55">
-        <source>yes or no</source>
-        <target>tak lub nie</target>
-      </trans-unit>
-      <trans-unit id="56">
-        <source>yes</source>
-        <target>tak</target>
-      </trans-unit>
-      <trans-unit id="57">
-        <source>no</source>
-        <target>nie</target>
-      </trans-unit>
-      <trans-unit id="58">
-        <source>Snap</source>
-        <target>Streszczenie</target>
-      </trans-unit>
-      <trans-unit id="59">
-        <source>Content</source>
-        <target>Treść</target>
-      </trans-unit>
-      <trans-unit id="60">
-        <source>Slug</source>
-        <target>Link</target>
-      </trans-unit>
-      <trans-unit id="61">
-        <source>Published at</source>
-        <target>Opublikowano</target>
-      </trans-unit>
-      <trans-unit id="62">
-        <source>Published by</source>
-        <target>Opublikował</target>
-      </trans-unit>
-      <trans-unit id="63">
-        <source>Created by</source>
-        <target>Stworzył</target>
-      </trans-unit>
-      <trans-unit id="64">
-        <source>Modified by</source>
-        <target>Zmodyfikował</target>
-      </trans-unit>
-      <trans-unit id="65">
-        <source>Description</source>
-        <target>Opis</target>
-      </trans-unit>
-      <trans-unit id="66">
-        <source>Filename</source>
-        <target>Nazwa pliku</target>
-      </trans-unit>
-      <trans-unit id="67">
-        <source>File</source>
-        <target>Plik</target>
-      </trans-unit>
-    </body>
-  </file>
-</xliff>    
+    <file orginal="global" source-language="en_US" datatype="plaintext">
+        <body>
+            <trans-unit id="1">
+                <source>create</source>
+                <target>utwórz</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>delete</source>
+                <target>usuń</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>save</source>
+                <target>zapisz</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>save and add</source>
+                <target>zapisz i dodaj następny</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Actions</source>
+                <target>Akcje</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>[0] no result|[1] 1 result|(1,+Inf] %1% results</source>
+                <target>[0] brak wyników|[1] 1 wynik|(1,+4] %1% wyniki|(4,+Inf] %1% wyników</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>desc</source>
+                <target>malejąco</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>asc</source>
+                <target>rosnąco</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>Your modifications have been saved</source>
+                <target>Twoja modyfikacja została zapisana</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>Are you sure?</source>
+                <target>Czy napewno?</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>no result</source>
+                <target>brak wyników</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>filters</source>
+                <target>filtry</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>filter</source>
+                <target>filtruj</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>reset</source>
+                <target>resetuj</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>edit</source>
+                <target>edytuj</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>list</source>
+                <target>powrót do listy</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>Password is mandatory</source>
+                <target>Hasło jest wymagane</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>There are some errors that prevent the form to validate</source>
+                <target>Jest kilka błędów uniemożliwiających walidację formularza</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>Please, enter a username</source>
+                <target>Proszę, wprowadzić nazwę użytkownika</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>Please, enter a firstname</source>
+                <target>Proszę, wprowadzić imię</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>Please, enter a lastname</source>
+                <target>Proszę, wprowadzić nazwisko</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>Created at:</source>
+                <target>Utworzono:</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>Updated at:</source>
+                <target>Zaktualizowano:</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>-- please choose from list --</source>
+                <target>-- proszę wybrać z listy --</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>The form is not valid because it contains some errors.</source>
+                <target>Formularz nie został wysłany gdyż zawiera błędy.</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>This record is not set</source>
+                <target>To pole nie zostało ustawione</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>This record can't be empty</source>
+                <target>To pole nie może być pute</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>This email address is invalid</source>
+                <target>Wprowadzony adres email jest nieprawidłowy</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>- no data -</source>
+                <target>- brak danych -</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>Created at</source>
+                <target>Utworzono</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>Updated at</source>
+                <target>Zaktualizowano</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>Input is too long</source>
+                <target>Wprowadzono za długi tekst</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>Uniqueness error</source>
+                <target>Błąd unikalności</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>Choose a language</source>
+                <target>Wybierz język</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>Polish</source>
+                <target>Polski</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>Home</source>
+                <target>Start</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>Login</source>
+                <target>Logowanie</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>You are in:</source>
+                <target>Jesteś w:</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>login</source>
+                <target>zaloguj się</target>
+            </trans-unit>
+            <trans-unit id="39">
+                <source>logout</source>
+                <target>wyloguj się</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>Administration</source>
+                <target>Administracja</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>Users</source>
+                <target>Użytkownicy</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>Permissions</source>
+                <target>Uprawnienia</target>
+            </trans-unit>
+            <trans-unit id="43">
+                <source>Groups</source>
+                <target>Grupy uprawnień</target>
+            </trans-unit>
+            <trans-unit id="44">
+                <source>Informations</source>
+                <target>Informacje</target>
+            </trans-unit>
+            <trans-unit id="45">
+                <source>Choose an action</source>
+                <target>Wybierz akcję</target>
+            </trans-unit>
+            <trans-unit id="46">
+                <source>code</source>
+                <target>kody</target>
+            </trans-unit>
+            <trans-unit id="47">
+                <source>Settings</source>
+                <target>Ustawienia</target>
+            </trans-unit>
+            <trans-unit id="48">
+                <source>New</source>
+                <target>Nowy</target>
+            </trans-unit>
+            <trans-unit id="49">
+                <source>Edit</source>
+                <target>Edytuj</target>
+            </trans-unit>
+            <trans-unit id="50">
+                <source>Delete</source>
+                <target>Usuń</target>
+            </trans-unit>
+            <trans-unit id="51">
+                <source>Title</source>
+                <target>Tytuł</target>
+            </trans-unit>
+            <trans-unit id="52">
+                <source>Active</source>
+                <target>Aktywny</target>
+            </trans-unit>
+            <trans-unit id="53">
+                <source>Author</source>
+                <target>Autor</target>
+            </trans-unit>
+            <trans-unit id="54">
+                <source>Thumb</source>
+                <target>Miniatura</target>
+            </trans-unit>
+            <trans-unit id="55">
+                <source>yes or no</source>
+                <target>tak lub nie</target>
+            </trans-unit>
+            <trans-unit id="56">
+                <source>yes</source>
+                <target>tak</target>
+            </trans-unit>
+            <trans-unit id="57">
+                <source>no</source>
+                <target>nie</target>
+            </trans-unit>
+            <trans-unit id="58">
+                <source>Snap</source>
+                <target>Streszczenie</target>
+            </trans-unit>
+            <trans-unit id="59">
+                <source>Content</source>
+                <target>Treść</target>
+            </trans-unit>
+            <trans-unit id="60">
+                <source>Slug</source>
+                <target>Link</target>
+            </trans-unit>
+            <trans-unit id="61">
+                <source>Published at</source>
+                <target>Opublikowano</target>
+            </trans-unit>
+            <trans-unit id="62">
+                <source>Published by</source>
+                <target>Opublikował</target>
+            </trans-unit>
+            <trans-unit id="63">
+                <source>Created by</source>
+                <target>Stworzył</target>
+            </trans-unit>
+            <trans-unit id="64">
+                <source>Modified by</source>
+                <target>Zmodyfikował</target>
+            </trans-unit>
+            <trans-unit id="65">
+                <source>Description</source>
+                <target>Opis</target>
+            </trans-unit>
+            <trans-unit id="66">
+                <source>Filename</source>
+                <target>Nazwa pliku</target>
+            </trans-unit>
+            <trans-unit id="67">
+                <source>File</source>
+                <target>Plik</target>
+            </trans-unit>
+            <trans-unit id="68">
+                <source>Filters</source>
+                <target>Filtry</target>
+            </trans-unit>
+            <trans-unit id="69">
+                <source><![CDATA[from %from_date%<br />to %to_date%]]></source>
+                <target><![CDATA[od %from_date%<br />do %to_date%]]></target>
+            </trans-unit>
+            <trans-unit id="70">
+                <source>from %from_date% to %to_date%</source>
+                <target>od %from_date% do %to_date%</target>
+            </trans-unit>
+            <trans-unit id="71">
+                <source>Accepted</source>
+                <target>Zaakceptowane</target>
+            </trans-unit>
+            <trans-unit id="71">
+                <source>Checked</source>
+                <target>Sprawdzone</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
