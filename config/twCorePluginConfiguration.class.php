@@ -31,7 +31,7 @@ class twCorePluginConfiguration extends sfPluginConfiguration {
 			try {
 				twVersionLoader::load();
 			} catch (Exception $e) {
-				pass;
+				;
 			}
 		}
 	}
