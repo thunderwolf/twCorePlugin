@@ -9,7 +9,7 @@
  */
 class twVersionFormFilter extends BasetwVersionFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

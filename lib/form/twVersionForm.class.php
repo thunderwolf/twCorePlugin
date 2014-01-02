@@ -8,7 +8,7 @@
  */
 class twVersionForm extends BasetwVersionForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

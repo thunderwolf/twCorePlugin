@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database name="propel" package="plugins.twCorePlugin.lib.model" defaultIdMethod="native">
 
-  <table name="tw_version" phpName="twVersion">
-    <column name="id" type="integer" required="true" primaryKey="true" autoincrement="true" />
-    <column name="name" type="VARCHAR" size="20" required="true" />
-    <column name="value" type="LONGVARCHAR" required="true" />
-    <unique name="code">
-      <unique-column name="name" />
-    </unique>
-  </table>
+    <table name="tw_version" phpName="twVersion">
+        <column name="id" type="integer" required="true" primaryKey="true" autoincrement="true"/>
+        <column name="name" type="VARCHAR" size="20" required="true"/>
+        <column name="value" type="LONGVARCHAR" required="true"/>
+        <unique name="code">
+            <unique-column name="name"/>
+        </unique>
+    </table>
 
 </database>
