@@ -9,7 +9,7 @@
  */
 class twCorePluginConfiguration extends sfPluginConfiguration
 {
-    const VERSION = '0.9.10.20120627 (BETA 4)';
+    const VERSION = '1.0.5';
 
     /**
      * @see sfPluginConfiguration
